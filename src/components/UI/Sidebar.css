@@ -1,0 +1,47 @@
+.sidebar {
+    position: fixed;
+    /*고정 위치 */
+    top: 60px;
+    /* 헤더 아래에서 시작 */
+    left: 0;
+    /* 왼쪽 끝에 고정 */
+    width: 250px;
+    /* 사이드바 너비 */
+    height: calc(100vh - 60px);
+    /* 전체 높이에서 헤더 높이를 뺌 */
+    background-color: #f8f9fa;
+    /* 배경 색상 */
+    padding: 0px;
+    /* 패딩 추가 */
+    box-Shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    /* 그림자 추가 (선택 사항) */
+    z-index: 1000;
+    /* 사이드바 위에 표시되도록 z-index 추가 */
+}
+
+.sidebar h3{
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 20px;
+    margin: 0;
+}
+
+.sidebar hr{
+    margin: 0;
+}
+
+/* 모바일 및 태블릿에서 사이드바 숨기기 */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%; /* 모바일에서는 전체 너비 */
+        top: 0; /* 헤더와 겹치지 않도록 조정 */
+        height: auto; /* 높이 자동 조정 */
+        position: relative; /* 고정 해제 */
+    }
+
+    main {
+        margin-left: 0; /* 사이드바의 마진 제거 */
+        margin-top: 60px; /* 헤더 높이만큼 마진 추가 */
+    }
+}
