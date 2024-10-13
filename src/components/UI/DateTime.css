@@ -1,0 +1,12 @@
+.example-custom-input {
+    background-color: #ffffff;
+    color: black;
+    cursor: pointer;
+    width: 200px;
+    padding: 10px;
+} 
+
+.btn{
+    margin: 3%;
+    width: 80px;
+}

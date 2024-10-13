@@ -1,70 +1,67 @@
-import ctp from '../data/ctprvn_WGS84.json';
-import sig from '../data/sig_WGS84.json';
-import emd from '../data/emd_WGS84.json';
-
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import Polygon from "./Polygon";
 
 const { kakao } = window;
 
-export default function Kakaomap() {
+export default function KakaoMap() {
+    const [map, setMap] = useState(null); // map 상태 관리
 
-    useEffect(() => {   //한 번만 렌더링
-        const data = ctp.features; // JSON 데이터
-        const polygons = []; // 폴리곤 저장 배열
-
-        const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-        const options = { //지도를 생성할 때 필요한 기본 옵션
-            center: new kakao.maps.LatLng(37.458666, 126.4419679), //지도의 중심좌표. (인천공항)
-            level: 12 //지도의 레벨(확대, 축소 정도)
+    useEffect(() => {
+        const container = document.getElementById('map'); // 지도를 담을 영역의 DOM 레퍼런스
+        const options = {
+            center: new kakao.maps.LatLng(37.458666, 126.4419679), // 지도의 중심좌표 (인천공항)
+            level: 10 // 지도의 레벨(확대, 축소 정도)
         };
 
-        const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-
-
-        const displayArea = (geometry, name) => {   //폴리곤 생성
-            const { type, coordinates } = geometry;
-
-            if (type === "MultiPolygon") {
-                // MultiPolygon 처리
-                coordinates.forEach(polygon => { //(중첩 배열 처리)
-                    const path = polygon[0].map(coordinate => new kakao.maps.LatLng(coordinate[1], coordinate[0]));
-                    createPolygon(path, name);
-                });
-            } else if (type === "Polygon") {
-                // Polygon 처리
-                const path = coordinates[0].map(coordinate => new kakao.maps.LatLng(coordinate[1], coordinate[0]));
-                createPolygon(path, name);
-            }
-        };
-
-        const createPolygon = (path, name) => {
-            const polygon = new kakao.maps.Polygon({    //폴리곤 설정
-                map: map,
-                path: path,
-                strokeWeight: 2,
-                strokeColor: '#004c80',
-                strokeOpacity: 0.8,
-                fillColor: '#fff',
-                fillOpacity: 0.7,
-            });
-
-            polygons.push(polygon);
-
-
-        };
-
-        // 각 행정구역에 대해 폴리곤 생성
-        data.forEach((val) => {
-            if (val.geometry) { //geometry 값이 있을 경우만
-                const geometry = val.geometry;
-                const name = val.properties.CTP_KOR_NM;
-                displayArea(geometry, name);
-            }
-        });
+        const kakaoMap = new kakao.maps.Map(container, options); // 지도 생성
+        setMap(kakaoMap);
+        
 
     }, []);
 
     return (
-        <div id="map"></div>
+        <div id="map" style={{
+            width: '100%',
+            height: '100vh'
+        }}>
+            {map && <Polygon map={map} />} {/* map이 존재할 때만 Polygon 컴포넌트 렌더링 */}
+        </div>
     );
 }
+
+// // 중심을 계산하는 함수(지역명 가운데 둘때 사용)
+// function findCentroid(points) {
+//     let i, j, len, p1, p2, f, area, x, y;
+//     area = x = y = 0;
+
+//     for (i = 0, len = points.length, j = len - 1; i < len; j = i++) {
+//         p1 = points[i];
+//         p2 = points[j];
+
+//         f = p1.getLat() * p2.getLng() - p2.getLat() * p1.getLng();
+//         x += (p1.getLng() + p2.getLng()) * f;
+//         y += (p1.getLat() + p2.getLat()) * f;
+//         area += f * 3;
+//     }
+
+//     return [x / area, y / area];
+// }
+
+// 폴리곤의 중앙을 계산
+// const centroid = findCentroid(path);
+// const position = new kakao.maps.LatLng(centroid[1], centroid[0]); // 중앙 위치 설정
+
+// const content = `<div class="label" style="color:black; font-weight:bold;">${name}</div>`;
+// const customOverlay = new kakao.maps.CustomOverlay({
+//     position: position,
+//     content: content,
+//     zIndex: 1
+// });
+// customOverlay.setMap(map); // 중앙에 이름 표시
+
+// const content = '<div class ="label" style ="color:black; font-weight:bold";><span class="left" ></span><span class="center">' + name + '</span><span class="right"></span></div>';
+// //const position = polygon.getPath()[0];
+// const customOverlay = new kakao.maps.CustomOverlay({
+//     position: position,
+//     cotent: content
+// }); //이름 생성

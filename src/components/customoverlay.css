@@ -1,0 +1,12 @@
+.area {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #888;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    top: 5px;
+    left: 5px;
+    padding: 2px;
+    pointer-events: none;
+}

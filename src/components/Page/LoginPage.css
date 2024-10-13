@@ -1,0 +1,37 @@
+/* src/components/Page/LoginPage.css */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+    font-weight: bold;
+}
+
+.login-form {
+    background: white;
+    padding: 5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-form .form-control {
+    width: 100%; /* 입력 필드를 가로로 길게 */
+    max-width: 400px; /* 최대 너비를 설정하여 너무 길어지지 않도록 */
+    margin-bottom: 1rem; /* 입력 필드 간의 간격을 추가 */
+}
+
+.login-links {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    font-weight: lighter;
+}
+
+.login-links a {
+    color: gray;
+    text-decoration: none;
+}
+
+.login-links a:hover {
+    text-decoration: underline;
+}
