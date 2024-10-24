@@ -1,0 +1,17 @@
+.result-content h4 {
+    margin-bottom: 1rem;
+    margin-top: 2px;
+}
+
+.mb-3 {
+    padding: 0%;
+    transition: background-color 0.3s ease;
+}
+
+.mb-3:hover {
+    background-color: #e2e2e2; /* 마우스를 올렸을 때 배경색 변경 */
+}
+
+.selected {
+    background-color: #c9e2ff; /* 클릭했을 때 배경색 변경 */
+}

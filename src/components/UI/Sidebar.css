@@ -40,7 +40,7 @@
 }
 
 .content.open {
-    max-height: 100px; /* 최대 높이를 설정하여 애니메이션 효과를 줍니다. */
+    max-height: 100%; /* 최대 높이를 설정하여 애니메이션 효과를 줍니다. */
     padding: 10px 0; /* 패딩 추가 */
     background-color: #ada1a124;
 }

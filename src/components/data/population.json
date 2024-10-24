@@ -1,0 +1,33 @@
+[
+    {
+        "date": "2024-08-22",
+        "name": "군자동",
+        "destination": "인천공항",
+        "data": [
+            { "time": "00시", "population": 23 },
+            { "time": "01시", "population": 33 },
+            { "time": "02시", "population": 40 },
+            { "time": "03시", "population": 35 },
+            { "time": "04시", "population": 30 },
+            { "time": "05시", "population": 25 },
+            { "time": "06시", "population": 20 },
+            { "time": "07시", "population": 40 },
+            { "time": "08시", "population": 21 },
+            { "time": "09시", "population": 30 },
+            { "time": "10시", "population": 10 },
+            { "time": "11시", "population": 50 },
+            { "time": "12시", "population": 20 },
+            { "time": "13시", "population": 25 },
+            { "time": "14시", "population": 30 },
+            { "time": "15시", "population": 43 },
+            { "time": "16시", "population": 40 },
+            { "time": "17시", "population": 45 },
+            { "time": "18시", "population": 50 },
+            { "time": "19시", "population": 55 },
+            { "time": "20시", "population": 30 },
+            { "time": "21시", "population": 46 },
+            { "time": "22시", "population": 30 },
+            { "time": "23시", "population": 32 }
+        ]
+    }
+]

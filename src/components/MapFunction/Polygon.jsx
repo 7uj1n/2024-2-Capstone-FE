@@ -3,19 +3,31 @@ import sig from '../data/sig_WGS84.json';
 import emd from '../data/emd_WGS84.json';
 
 import './customoverlay.css';
+import useStore from '../../store/RegionStore'; // Zustand 스토어 가져오기
 
 const { kakao } = window;
 
-function Polygon({map}) {
+function Polygon({ map }) {
     let data = ctp.features; // 초기 데이터
     let detailMode = false;
     let sebuDetail = false;
     let polygons = []; // 폴리곤 저장 배열
 
     const customOverlay = new kakao.maps.CustomOverlay({}); //지역명 오버레이 생성
+    let infowindow = null; // 인포윈도우 변수
 
+    const setSelectedRegion = useStore((state) => state.setSelectedRegion); // Zustand 스토어에서 상태 업데이트 함수 가져오기
+    // const isPolygon = useStore((state) => state.isPolygon); // Zustand 스토어에서 폴리곤 표시 여부 가져오기
+
+    // if (!isPolygon) {
+    //     removePolygon(); // 폴리곤 제거
+    //     console.log(polygons);
+    //     return;
+    //     // infowindow.close();        
+    // } else {
+    //     init(); // 초기 폴리곤 생성
+    // }
     init(); // 초기 폴리곤 생성
-
     kakao.maps.event.addListener(map, 'zoom_changed', function () {
         const level = map.getLevel();
 
@@ -62,7 +74,7 @@ function Polygon({map}) {
         }
     });
 
-    function createPolygon(path, name) {
+    function createPolygon(path, name, cd) {
         const polygon = new kakao.maps.Polygon({
             map: map,
             path: path,
@@ -94,34 +106,51 @@ function Polygon({map}) {
 
         kakao.maps.event.addListener(polygon, 'click', function (mouseEvent) {
             let latlng = mouseEvent.latLng;
-            if (!detailMode && !sebuDetail) {
+            if (!detailMode && !sebuDetail) {   //시구 폴리곤
                 map.setLevel(9); // 클릭 시 레벨 변경
                 latlng = mouseEvent.latLng;
                 // 지도의 중심을 클릭한 위치로 이동
                 map.panTo(latlng);
-            } else if (detailMode && !sebuDetail) {
-                map.setLevel(7);
+            } else if (detailMode && !sebuDetail) { //시군구 폴리곤
+                map.setLevel(6);
                 latlng = mouseEvent.latLng;
                 // 지도의 중심을 클릭한 위치로 이동
                 map.panTo(latlng);
             }
-            else if (detailMode && sebuDetail) {
-                //클릭시 인포메이션 띄우고 선택 버튼 만들기. (선택한 지역 이름 넘겨서 데이터 불러와)
+            else if (detailMode && sebuDetail) {    //법정동 폴리곤
+                // 클릭 시 인포윈도우 띄우고 선택 버튼 만들기. 
+                if (infowindow) {
+                    infowindow.close();
+                }
+                const content = `
+                    <div style="padding:10px;">
+                        <strong>${name}</strong>
+                        <br />
+                        <button style="background-color: black; color: white;" onclick="window.setSelectedRegion('${name}', '${cd}'); alert('선택한 지역: ${name}');">선택하기</button>
+                    </div>
+                `;
+
+                infowindow = new kakao.maps.InfoWindow({
+                    position: latlng,
+                    content: content,
+                    removable: true
+                });
+                infowindow.open(map);
             }
         });
     };
 
-    function displayArea(geometry, name) {
+    function displayArea(geometry, name, cd) {
         const { type, coordinates } = geometry;
 
         if (type === "MultiPolygon") {
             coordinates.forEach(polygon => {
                 const path = polygon[0].map(coordinate => new kakao.maps.LatLng(coordinate[1], coordinate[0]));
-                createPolygon(path, name);
+                createPolygon(path, name, cd);
             });
         } else if (type === "Polygon") {
             const path = coordinates[0].map(coordinate => new kakao.maps.LatLng(coordinate[1], coordinate[0]));
-            createPolygon(path, name);
+            createPolygon(path, name, cd);
         }
     };
 
@@ -130,7 +159,9 @@ function Polygon({map}) {
             if (val.geometry) {
                 const geometry = val.geometry;
                 const name = val.properties.CTP_KOR_NM || val.properties.SIG_KOR_NM || val.properties.EMD_KOR_NM;
-                displayArea(geometry, name);
+
+                let cd = val.properties.CTP_CD || val.properties.SIG_CD || val.properties.EMD_CD;   //법정동 코드
+                displayArea(geometry, name, cd);
             }
         });
     };
@@ -141,6 +172,9 @@ function Polygon({map}) {
         });
         polygons = []; // 폴리곤 배열 초기화
     };
+
+    // 전역 함수로 setSelectedRegion 설정
+    window.setSelectedRegion = setSelectedRegion;
 }
 
 export default Polygon;
