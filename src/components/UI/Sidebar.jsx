@@ -111,7 +111,7 @@ function Sidebar() {
     };
 
     const handleRouteClick = (routeId) => {
-        alert(`경로 ${routeId} 선택됨`);
+        
         // 해당 경로만 보이게 하기
     };
 

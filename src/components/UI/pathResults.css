@@ -1,5 +1,5 @@
 .result-content h4 {
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
     margin-top: 2px;
 }
 
@@ -14,4 +14,17 @@
 
 .selected {
     background-color: #c9e2ff; /* 클릭했을 때 배경색 변경 */
+}
+
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.header-container h4 {
+    flex-grow: 1;
+    text-align: center;
 }
