@@ -17,3 +17,15 @@
     height: calc(100vh - 60px); /* 고정된 높이 설정 */
     margin-top: 60px; /* 헤더 높이만큼의 여백 추가 */
 }
+
+.dashboard-container h4 {
+    margin-top: 1rem;
+}
+
+.chart-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}

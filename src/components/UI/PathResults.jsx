@@ -121,6 +121,7 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
                     </Card.Body>
                 </Card>
             ))}
+            <h5 className="small-text">marker designed by nawicon from Flaticon</h5>
         </div>
     );
 };

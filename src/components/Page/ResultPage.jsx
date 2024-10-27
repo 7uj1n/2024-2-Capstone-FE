@@ -111,6 +111,10 @@ import './ResultPage.css';
 import PopulationChart from "../UI/PopulationChart";
 import PathLeadTimeChart from "../UI/PathLeadTimeChart"; // PathLeadTimeChart 컴포넌트 가져오기
 
+import busMarkerImage from './images/marker/bus.png';
+import trainMarkerImage from './images/marker/train.png';
+import placeMarkerImage from './images/marker/place.png';
+
 const { kakao } = window;
 
 function ResultPage() {
@@ -166,28 +170,35 @@ function ResultPage() {
             polyline.setMap(map); // 지도에 폴리라인 추가
             newPolylines.push(polyline);
 
+            // 마커 이미지 크기 설정
+            const markerSize = new kakao.maps.Size(40, 40); // 원하는 크기로 설정
+
             // 시작 지점 마커 생성
             const startMarker = new kakao.maps.Marker({
                 position: linePath[0],
                 map: map,
-                title: `${route.routeName} 시작 지점`
+                title: `${route.routeName} 시작 지점`,
+                image: new kakao.maps.MarkerImage(placeMarkerImage, markerSize)
             });
 
             // 끝 지점 마커 생성
             const endMarker = new kakao.maps.Marker({
                 position: linePath[linePath.length - 1],
                 map: map,
-                title: `${route.routeName} 끝 지점`
+                title: `${route.routeName} 끝 지점`,
+                image: new kakao.maps.MarkerImage(placeMarkerImage, markerSize)
             });
 
             newMarkers.push(startMarker, endMarker);
 
             // 역과 정류장 마커 생성
             route.station.forEach(station => {
+                const markerImage = station.type === 'bus' ? busMarkerImage : trainMarkerImage;
                 const stationMarker = new kakao.maps.Marker({
                     position: new kakao.maps.LatLng(station.lat, station.lng),
                     map: map,
-                    title: station.name
+                    title: station.name,
+                    image: new kakao.maps.MarkerImage(markerImage, markerSize)
                 });
 
                 // 인포윈도우 생성
@@ -229,9 +240,13 @@ function ResultPage() {
             </div>
             <div className="dashboard-container">
                 <h4>{selectedDate} {selectedRegion}→인천공항 유동인구 수</h4>
-                <PopulationChart />
+                <div className="chart-container">
+                    <PopulationChart />
+                </div>
                 <h4>경로별 예상 시간 비교</h4>
-                <PathLeadTimeChart />
+                <div className="chart-container">
+                    <PathLeadTimeChart />
+                </div>
             </div>
         </div>
     );
