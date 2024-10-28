@@ -15,7 +15,7 @@ const PopulationChart = () => {
     const tickValues = data[0].data.filter((_, index) => index % 3 === 0).map(d => d.x);
 
     return (
-        <div style={{ height: '500px' }}> {/* 고정된 높이 설정 */}
+        <div style={{ height: '400px' }}> {/* 고정된 높이 설정 */}
             <ResponsiveLine
                 data={data} // 변환된 데이터 전달
                 margin={{ top: 50, right: 20, bottom: 50, left: 60 }} // 차트 여백 설정

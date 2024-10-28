@@ -159,16 +159,31 @@ function ResultPage() {
 
             const linePath = route.coordinate.map(coord => new kakao.maps.LatLng(coord[0], coord[1]));
 
-            const polyline = new kakao.maps.Polyline({
+            // 테두리 폴리라인 생성
+            const borderPolyline = new kakao.maps.Polyline({
                 path: linePath,
-                strokeWeight: 5,
-                strokeColor: route.type === 'exist' ? '#FF0000' : '#0000FF', // 기존 경로는 빨간색, 새로운 경로는 파란색
-                strokeOpacity: 0.7,
-                strokeStyle: 'solid'
+                strokeWeight: 8, // 테두리 두께
+                strokeColor: '#000000', // 테두리 색상 (검정색)
+                strokeOpacity: 0.6, // 테두리 불투명도
+                strokeStyle: 'solid' // 테두리 스타일
             });
 
-            polyline.setMap(map); // 지도에 폴리라인 추가
-            newPolylines.push(polyline);
+            // 메인 폴리라인 생성
+            const polyline = new kakao.maps.Polyline({
+                path: linePath,
+                strokeWeight: 6, // 두께를 약간 더 두껍게 설정
+                strokeColor: route.type === 'exist' ? '#4682B4' : '#FF6347', // 기존 경로는 강철색, 새로운 경로는 토마토색
+                strokeOpacity: 0.9, // 불투명도를 약간 더 높게 설정
+                strokeStyle: 'solid', // 선 스타일을 실선으로 설정
+                // endArrow: true // 끝에 화살표 추가
+            });
+
+            // 테두리 폴리라인을 먼저 지도에 추가
+            borderPolyline.setMap(map);
+            // 메인 폴리라인을 지도에 추가
+            polyline.setMap(map);
+
+            newPolylines.push(borderPolyline, polyline);
 
             // 마커 이미지 크기 설정
             const markerSize = new kakao.maps.Size(40, 40); // 원하는 크기로 설정

@@ -1,21 +1,45 @@
 .result-content h4 {
-    /* margin-bottom: 1rem; */
     margin-top: 2px;
 }
 
-.mb-3 {
-    padding: 0%;
-    transition: background-color 0.3s ease;
+.card {
+    padding: 0;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px; /* 카드 사이에 공백 추가 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.mb-3:hover {
-    background-color: #e2e2e2; /* 마우스를 올렸을 때 배경색 변경 */
+.card:hover {
+    background-color: #f9f9f9; /* 마우스를 올렸을 때 배경색 변경 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .selected {
-    background-color: #c9e2ff; /* 클릭했을 때 배경색 변경 */
+    background-color: #e6f7ff; /* 클릭했을 때 배경색 변경 */
+    border-color: #91d5ff;
 }
 
+.card-header {
+    background-color: #fafafa;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-text {
+    margin-bottom: 10px;
+}
+
+.list-group-item {
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
+}
 
 .header-container {
     display: flex;
@@ -29,7 +53,6 @@
     text-align: center;
 }
 
-/* pathResults.css */
 .small-text {
     font-size: 12px;
     color: #888;

@@ -10,7 +10,7 @@
 }
 
 .dashboard-container {
-    flex: 1;
+    width: 570px; /* 고정된 너비 설정 */
     padding: 20px;
     background-color: #f0f0f0;
     overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 표시 */
@@ -20,6 +20,7 @@
 
 .dashboard-container h4 {
     margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .chart-container {

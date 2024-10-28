@@ -70,6 +70,9 @@ import useStore from '../../store/RegionStore'; // Zustand 스토어 가져오�
 import { useNavigate } from 'react-router-dom'; // useNavigate 훅 가져오기
 import './pathResults.css';
 
+import busMarkerImage from '../page/images/marker/bus.png';
+import trainMarkerImage from '../page/images/marker/train.png';
+
 export default function PathResults({ selectedRegion, onRouteClick }) {
     const [selectedRoute, setSelectedRoute] = useState(null); // 선택된 경로 상태 관리
     const selectedDate = useStore(state => state.selectedDate); // 선택한 날짜 가져오기
@@ -104,7 +107,7 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
             {pathData.path.map(route => (
                 <Card
                     key={route.id}
-                    className={`mb-3 ${selectedRoute === route.id ? 'selected' : ''}`}
+                    className={`card ${selectedRoute === route.id ? 'selected' : ''}`}
                     onClick={() => handleRouteClick(route.id)}
                     style={{ cursor: 'pointer' }}
                 >
@@ -115,7 +118,14 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
                         <Card.Text>소요 시간: {route.leadtime}</Card.Text>
                         <ListGroup variant="flush">
                             {route.station.map(station => (
-                                <ListGroup.Item key={station.id}>{station.name}</ListGroup.Item>
+                                <ListGroup.Item key={station.id}>
+                                    <img
+                                        src={station.type === 'bus' ? busMarkerImage : trainMarkerImage}
+                                        alt={station.type}
+                                        style={{ width: '40px', marginRight: '10px' }}
+                                    />
+                                    {station.name}
+                                </ListGroup.Item>
                             ))}
                         </ListGroup>
                     </Card.Body>
