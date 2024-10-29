@@ -10,9 +10,9 @@ function Header() {
                 <Navbar.Brand href="/" className='ml-0 text-white' style={{ fontWeight: 'bold' }}>✈️ 인천공항 경로 찾기</Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
-                        <div style={{float: 'left'}}>
-                            {/* <NavLink to="/" style={{ color: 'black' }}>로그아웃</NavLink> */}
-                        </div>
+                        {/* <div style={{float: 'left'}}>
+                            <NavLink to="/" style={{ color: 'white' }}>로그인</NavLink>
+                        </div> */}
                 </Navbar.Collapse>
             </Container>
         </Navbar>

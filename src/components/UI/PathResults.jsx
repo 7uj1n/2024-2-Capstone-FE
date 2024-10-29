@@ -73,6 +73,11 @@ import './pathResults.css';
 import busMarkerImage from '../page/images/marker/bus.png';
 import trainMarkerImage from '../page/images/marker/train.png';
 
+const routeColors = {
+    new: '#FF6347', // 토마토색
+    exist: '#4682B4' // 강철색
+};
+
 export default function PathResults({ selectedRegion, onRouteClick }) {
     const [selectedRoute, setSelectedRoute] = useState(null); // 선택된 경로 상태 관리
     const selectedDate = useStore(state => state.selectedDate); // 선택한 날짜 가져오기
@@ -97,10 +102,13 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
 
     return (
         <div className="result-content">
+            {/* {selectedDate && selectedTime && (
+                <h5>{selectedDate} {selectedTime}</h5>
+            )} */}
+            <div className="header-container">
             {selectedDate && selectedTime && (
                 <h5>{selectedDate} {selectedTime}</h5>
             )}
-            <div className="header-container">
                 <h4>{selectedRegion} 경로 결과</h4>
                 <Button variant="secondary" onClick={handleReset}>초기화</Button>
             </div>
@@ -112,6 +120,16 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
                     style={{ cursor: 'pointer' }}
                 >
                     <Card.Header>
+                        <span
+                            style={{
+                                display: 'inline-block',
+                                width: '12px',
+                                height: '12px',
+                                backgroundColor: routeColors[route.type],
+                                marginRight: '10px',
+                                borderRadius: '50%'
+                            }}
+                        ></span>
                         경로 {route.id} ({route.type === 'exist' ? '기존 경로' : '새로운 경로'})
                     </Card.Header>
                     <Card.Body>

@@ -111,7 +111,7 @@ function Sidebar() {
     };
 
     const handleRouteClick = (routeId) => {
-        
+
         // 해당 경로만 보이게 하기
     };
 
@@ -140,7 +140,7 @@ function Sidebar() {
                 >
                     최적 경로 찾기
                 </NavLink>
-
+                <hr />
                 <div className={`content ${activeLink === 'path' || activeLink === 'result' ? 'open' : ''}`}>  {/*클릭된 상태면 내용 보여줌 */}
                     {activeLink === 'path' && (
                         <div>
@@ -148,7 +148,7 @@ function Sidebar() {
                             <DateTime onSearch={handlePathSearch} />
                         </div>
                     )}  {/*활성화된 링크에 따라 텍스트 표시*/}
-                    
+
                     {activeLink === 'result' && selectedRegion && (
                         <PathResults selectedRegion={selectedRegion} onRouteClick={handleRouteClick} />
                     )}
