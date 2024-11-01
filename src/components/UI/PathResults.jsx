@@ -102,13 +102,13 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
 
     return (
         <div className="result-content">
-            {/* {selectedDate && selectedTime && (
-                <h5>{selectedDate} {selectedTime}</h5>
-            )} */}
-            <div className="header-container">
             {selectedDate && selectedTime && (
                 <h5>{selectedDate} {selectedTime}</h5>
             )}
+            <div className="header-container">
+            {/* {selectedDate && selectedTime && (
+                <h5>{selectedDate} {selectedTime}</h5>
+            )} */}
                 <h4>{selectedRegion} 경로 결과</h4>
                 <Button variant="secondary" onClick={handleReset}>초기화</Button>
             </div>

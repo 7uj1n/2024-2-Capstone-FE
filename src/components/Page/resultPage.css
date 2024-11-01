@@ -31,3 +31,90 @@
     margin-bottom: 20px;
 }
 
+
+
+.result-page {
+    display: flex;
+    height: 100vh; /* 페이지 전체 높이를 100vh로 설정 */
+}
+
+.map-container {
+    flex: 2;
+    /* position: relative; */
+    height: calc(100vh - 60px); /* 헤더 높이만큼 뺀 높이 설정 */
+}
+
+
+.dashboard-container {
+    width: 570px; /* 고정된 너비 설정 */
+    padding: 20px;
+    background-color: #f0f0f0;
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 표시 */
+    height: calc(100vh - 60px); /* 고정된 높이 설정 */
+    margin-top: 60px; /* 헤더 높이만큼의 여백 추가 */
+}
+
+.dashboard-container h4 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.chart-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+
+
+/* 커스텀 오버레이 CSS */
+
+
+.custom-infowindow {
+    border-radius: 10px;
+    padding: 2rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: white;
+    border: 2px solid #ff5a5f;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    text-align: center; /* 중앙 정렬 */
+}
+
+.infowindow-content {
+    /* margin-bottom: 10px; */
+}
+
+.infowindow-close {
+    position: absolute;
+    top: -5px;
+    right: -3px;
+    background: transparent; /* 배경을 투명하게 설정 */
+    border: none;
+    color: #ff5a5f; /* 텍스트 색상 설정 */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 20px;
+    text-align: center;
+}
+
+
+.custom-infowindow::after {
+    content: '';
+    position: absolute;
+    bottom: -10px; /* 삼각형 높이만큼 아래로 이동 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid transparent;
+    border-top-color: #ff5a5f; /* 삼각형 테두리 색상 */
+}

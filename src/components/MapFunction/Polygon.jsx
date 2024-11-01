@@ -4,6 +4,7 @@ import emd from '../data/emd_WGS84.json';
 
 import './customoverlay.css';
 import useStore from '../../store/RegionStore'; // Zustand 스토어 가져오기
+import { useRef } from 'react';
 
 const { kakao } = window;
 
@@ -14,19 +15,10 @@ function Polygon({ map }) {
     let polygons = []; // 폴리곤 저장 배열
 
     const customOverlay = new kakao.maps.CustomOverlay({}); //지역명 오버레이 생성
-    let infowindow = null; // 인포윈도우 변수
+    const infoWindowRef = useRef(null); // 현재 열려 있는 커스텀 오버레이 참조 관리
 
     const setSelectedRegion = useStore((state) => state.setSelectedRegion); // Zustand 스토어에서 상태 업데이트 함수 가져오기
-    // const isPolygon = useStore((state) => state.isPolygon); // Zustand 스토어에서 폴리곤 표시 여부 가져오기
 
-    // if (!isPolygon) {
-    //     removePolygon(); // 폴리곤 제거
-    //     console.log(polygons);
-    //     return;
-    //     // infowindow.close();        
-    // } else {
-    //     init(); // 초기 폴리곤 생성
-    // }
     init(); // 초기 폴리곤 생성
     kakao.maps.event.addListener(map, 'zoom_changed', function () {
         const level = map.getLevel();
@@ -118,24 +110,35 @@ function Polygon({ map }) {
                 map.panTo(latlng);
             }
             else if (detailMode && sebuDetail) {    //법정동 폴리곤
-                // 클릭 시 인포윈도우 띄우고 선택 버튼 만들기. 
-                if (infowindow) {
-                    infowindow.close();
+                // 클릭 시 커스텀 오버레이 띄우고 선택 버튼 만들기. 
+                if (infoWindowRef.current) {
+                    infoWindowRef.current.setMap(null);
                 }
-                const content = `
-                    <div style="padding:10px;">
+
+                const overlayContent = document.createElement('div');
+                overlayContent.className = 'custom-infowindow';
+                overlayContent.innerHTML = `
+                    <div class="infowindow-content">
                         <strong>${name}</strong>
                         <br />
-                        <button style="background-color: black; color: white;" onclick="window.setSelectedRegion('${name}', '${cd}'); alert('선택한 지역: ${name}');">선택하기</button>
+                        <button class="infowindow-select" onclick="window.setSelectedRegion('${name}', '${cd}'); alert('선택한 지역: ${name}');">선택하기</button>
                     </div>
+                    <button class="infowindow-close">X</button>
                 `;
 
-                infowindow = new kakao.maps.InfoWindow({
+                const customOverlay = new kakao.maps.CustomOverlay({
                     position: latlng,
-                    content: content,
-                    removable: true
+                    content: overlayContent,
+                    yAnchor: 1.5
                 });
-                infowindow.open(map);
+
+                // 닫기 버튼 이벤트 추가
+                overlayContent.querySelector('.infowindow-close').addEventListener('click', () => {
+                    customOverlay.setMap(null);
+                });
+
+                customOverlay.setMap(map);
+                infoWindowRef.current = customOverlay;
             }
         });
     };
