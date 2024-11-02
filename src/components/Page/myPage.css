@@ -1,0 +1,38 @@
+.mypage-container {
+    padding-top: 70px; /* 헤더 높이만큼 패딩 추가 */
+    background-color: #f8f9fa; /* 배경색 추가 */
+    height: 100vh; /* 높이 100vh로 설정 */
+}
+
+.mypage-title {
+    background-color: #e46f73; /* 배경색 변경 */
+    color: white;
+    padding: 1rem;
+    border-radius: 20px;
+    text-align: left;
+    padding-left: 1.5rem;
+}
+
+.mypage-content {
+    max-width: 40%; /* 가로 길이 제한 */
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+.mypage-text {
+    margin: 2rem;
+}
+
+.mypage-card {
+    margin-bottom: 3rem;
+}
+
+.card-container {
+    background-color: #e46f73; /* 카드 컨테이너 배경색 */
+    padding: 1rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
+    padding-top: 4rem;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    margin-bottom: 1rem; /* 카드 컨테이너 간격 */
+}

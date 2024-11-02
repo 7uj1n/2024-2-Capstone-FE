@@ -178,12 +178,12 @@ function ResultPage() {
                 </div>
             </div>
             <div className="dashboard-container">
-                <h4>{selectedDate} {selectedRegion}→인천공항 유동인구 수</h4>
                 <div className="chart-container">
+                    <h4>{selectedDate} {selectedRegion}→인천공항 유동인구 수</h4>
                     <PopulationChart />
                 </div>
-                <h4>경로별 예상 시간 비교</h4>
                 <div className="chart-container">
+                    <h4>경로별 예상 시간 비교</h4>
                     <PathLeadTimeChart />
                 </div>
             </div>
