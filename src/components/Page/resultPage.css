@@ -12,10 +12,27 @@
 .dashboard-container {
     width: 570px; /* 고정된 너비 설정 */
     padding: 20px;
-    background-color: #f0f0f0;
+    background-color: #fff6f6d7;
     overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 표시 */
     height: calc(100vh - 60px); /* 고정된 높이 설정 */
     margin-top: 60px; /* 헤더 높이만큼의 여백 추가 */
+    border: 1px solid #ddd; /* 살짝 테두리 추가 */
+}
+
+/* 커스텀 스크롤바 스타일 */
+.dashboard-container::-webkit-scrollbar {
+    width: 12px; /* 스크롤바 너비 */
+}
+
+.dashboard-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 스크롤바 트랙 배경색 */
+    border-radius: 10px; /* 트랙 모서리 둥글게 */
+}
+
+.dashboard-container::-webkit-scrollbar-thumb {
+    background-color: #797979; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 모서리 둥글게 */
+    border: 3px solid #f1f1f1; /* 스크롤바 테두리 */
 }
 
 .dashboard-container h4 {
@@ -29,49 +46,10 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    border: 1px solid #ddd; /* 살짝 테두리 추가 */
 }
-
-
-
-.result-page {
-    display: flex;
-    height: 100vh; /* 페이지 전체 높이를 100vh로 설정 */
-}
-
-.map-container {
-    flex: 2;
-    /* position: relative; */
-    height: calc(100vh - 60px); /* 헤더 높이만큼 뺀 높이 설정 */
-}
-
-
-.dashboard-container {
-    width: 570px; /* 고정된 너비 설정 */
-    padding: 20px;
-    background-color: #f0f0f0;
-    overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 표시 */
-    height: calc(100vh - 60px); /* 고정된 높이 설정 */
-    margin-top: 60px; /* 헤더 높이만큼의 여백 추가 */
-}
-
-.dashboard-container h4 {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
-.chart-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-
 
 /* 커스텀 오버레이 CSS */
-
-
 .custom-infowindow {
     border-radius: 10px;
     padding: 2rem;
@@ -82,10 +60,6 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: relative;
     text-align: center; /* 중앙 정렬 */
-}
-
-.infowindow-content {
-    /* margin-bottom: 10px; */
 }
 
 .infowindow-close {
@@ -103,7 +77,6 @@
     line-height: 20px;
     text-align: center;
 }
-
 
 .custom-infowindow::after {
     content: '';

@@ -10,18 +10,18 @@ function PasswordChangeModal({ show, handleClose }) {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form.Group controlId="formCurrentPassword">
-                        <Form.Label className="form-label">현재 비밀번호</Form.Label>
-                        <Form.Control type="password" placeholder="현재 비밀번호를 입력하세요" />
-                    </Form.Group>
-                    <Form.Group controlId="formNewPassword">
-                        <Form.Label className="form-label">새 비밀번호</Form.Label>
-                        <Form.Control type="password" placeholder="새 비밀번호를 입력하세요" />
-                    </Form.Group>
-                    <Form.Group controlId="formConfirmPassword">
-                        <Form.Label className="form-label">새 비밀번호 확인</Form.Label>
-                        <Form.Control type="password" placeholder="새 비밀번호를 다시 입력하세요" />
-                    </Form.Group>
+                    <div className="floating-label-group">
+                        <Form.Control type="password" id="formCurrentPassword" placeholder=" " required />
+                        <Form.Label htmlFor="formCurrentPassword">현재 비밀번호</Form.Label>
+                    </div>
+                    <div className="floating-label-group">
+                        <Form.Control type="password" id="formNewPassword" placeholder=" " required />
+                        <Form.Label htmlFor="formNewPassword">새 비밀번호</Form.Label>
+                    </div>
+                    <div className="floating-label-group">
+                        <Form.Control type="password" id="formConfirmPassword" placeholder=" " required />
+                        <Form.Label htmlFor="formConfirmPassword">새 비밀번호 확인</Form.Label>
+                    </div>
                 </Form>
             </Modal.Body>
             <Modal.Footer>

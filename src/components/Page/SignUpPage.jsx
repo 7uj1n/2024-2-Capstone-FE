@@ -2,12 +2,12 @@ import React from 'react';
 import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './signUpPage.css';
+import './SignUpPage.css';
 
 function SignUpPage() {
     const handleSignup = (event) => {
         event.preventDefault();
-        // asxios.post로 회원가입 요청 보내기. Api 구현 후 수정예정
+        // axios.post로 회원가입 요청 보내기. Api 구현 후 수정예정
     };
 
     return (
@@ -15,28 +15,29 @@ function SignUpPage() {
             <Container className="signup-form">
                 <Row>
                     <Col md={12}>
-                        <h2 className="text-center">회원가입</h2>
+                        <h2 className="signup-title">회원가입</h2>
 
                         <Form onSubmit={handleSignup}>
-                            <Form.Group controlId="formBasicName">
-                                <Form.Label>이름</Form.Label>
-                                <Form.Control type="text" placeholder="Enter name" required />
-                            </Form.Group>
+                            <div className="floating-label-group">
+                                <Form.Control type="text" id="formBasicName" placeholder=" " required />
+                                <Form.Label htmlFor="formBasicName">이름</Form.Label>
+                            </div>
 
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label>이메일 주소</Form.Label>
-                                <Form.Control type="email" placeholder="Enter email" required />
-                            </Form.Group>
+                            <div className="floating-label-group">
+                                <Form.Control type="email" id="formBasicEmail" placeholder=" " required />
+                                <Form.Label htmlFor="formBasicEmail">이메일 주소</Form.Label>
+                            </div>
 
-                            <Form.Group controlId="formBasicPassword">
-                                <Form.Label>비밀번호</Form.Label>
-                                <Form.Control type="password" placeholder="Password" required />
-                            </Form.Group>
+                            <div className="floating-label-group">
+                                <Form.Control type="password" id="formBasicPassword" placeholder=" " required />
+                                <Form.Label htmlFor="formBasicPassword">비밀번호</Form.Label>
+                            </div>
 
-                            <Form.Group controlId="formBasicConfirmPassword">
-                                <Form.Label>비밀번호 확인</Form.Label>
-                                <Form.Control type="password" placeholder="Confirm Password" required />
-                            </Form.Group>
+                            <div className="floating-label-group">
+                                <Form.Control type="password" id="formBasicConfirmPassword" placeholder=" " required />
+                                <Form.Label htmlFor="formBasicConfirmPassword">비밀번호 확인</Form.Label>
+                            </div>
+
                             <Button className="btn" variant="danger" type="submit">
                                 회원가입
                             </Button>
