@@ -1,0 +1,176 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #fff5f5d7; /* 배경색 추가 */
+}
+
+.comments-container {
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 높이 100vh로 설정 */
+    width: 100vw; /* 너비 100vw로 설정 */
+    background-color: #fff5f5d7; /* 배경색 추가 */
+    padding-top: 70px; /* 헤더 높이만큼 패딩 추가 */
+    box-sizing: border-box; /* 패딩을 포함한 박스 크기 설정 */
+    max-width: 1000px;
+}
+
+.comments-content {
+    width: 100%;
+    max-width: 600px; /* 가로 길이 제한 */
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+.comments-title {
+    background-color: #ffffff; /* 배경색 변경 */
+    color: rgb(0, 0, 0);  /* 글자색 변경 */
+    padding: 1rem;
+    border-radius: 20px;
+    text-align: left;
+    padding-left: 1.5rem;
+    border: 2px solid #ff5a5f; /* 살짝 테두리 추가 */
+}
+
+.comments-card {
+    margin-top: 1.5rem;
+    border: 2px solid #ff5a5f; /* 살짝 테두리 추가 */
+    background-color: #ffffff; /* 카드 컨테이너 배경색 */
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    transition: none; /* 마우스 hover 시 효과 제거 */
+}
+
+.comments-card:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 마우스 hover 시 그림자 효과 유지 */
+    background-color: #ffffff; /* 마우스 hover 시 배경색 유지 */
+}
+
+.comment-text {
+    font-size: 1rem;
+    color: #333;
+    text-align: left; /* 왼쪽 정렬 */
+}
+
+.comment-route {
+    font-size: 0.8rem; /* 더 작은 글자 크기 */
+    color: #999;
+    text-align: left; /* 왼쪽 정렬 */
+    margin-top: 0.25rem; /* 위쪽 마진 추가 */
+}
+
+.comment-date {
+    font-size: 0.8rem;
+    color: #999;
+    text-align: right;
+    padding-right: 1rem; /* 오른쪽 패딩 추가 */
+}
+
+.comment-divider {
+    border-top: 1px solid #dddddd; /* 댓글 구분선 */
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3.5rem; /* 높이 설정 */
+    padding-left: 0.5rem; /* 왼쪽 패딩 추가 */
+    padding-right: 1.4rem; /* 오른쪽 패딩 추가 */
+}
+
+.form-header .form-check {
+    display: flex;
+    align-items: center;
+    gap: 3.6rem; /* 체크박스와 글자 사이 간격 추가 */
+}
+
+.form-header .form-check-input {
+    margin-top: 0; /* 체크박스 정렬 */
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid #ddd;
+    background-color: #fff;
+    appearance: none;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.form-header .form-check-input:checked {
+    background-color: #ff5a5f; /* 웹사이트 스타일에 맞게 색상 변경 */
+    border-color: #ff5a5f;
+}
+
+.form-header .form-check-label {
+    font-size: 1.2rem; /* 글자 크기 */
+    color: #333; /* 글자 색상 */
+}
+
+.form-header .btn {
+    margin-left: auto; /* 버튼을 오른쪽으로 정렬 */
+    margin-right: 0rem;
+}
+
+.comment-row {
+    align-items: center;
+    min-height: 60px; /* 각 댓글의 최소 높이 설정 */
+    padding-left: 1rem; /* 왼쪽 패딩 추가 */
+}
+
+.comment-row .form-check-input {
+    margin-top: 0; /* 체크박스 정렬 */
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid #ddd;
+    background-color: #fff;
+    appearance: none;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.comment-row .form-check-input:checked {
+    background-color: #ff5a5f; /* 웹사이트 스타일에 맞게 색상 변경 */
+    border-color: #ff5a5f;
+}
+
+
+.pagination-container {
+    background-color: #ffffff; /* 배경색 변경 */
+    border: 2px solid #ff5a5f; /* 살짝 테두리 추가 */
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    padding: 1rem;
+    margin: 0px;
+}
+
+.pagination .page-item .page-link {
+    border-radius: 50%; /* 동그라미 모양으로 변경 */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    border: 1px solid #dddddd; /* 테두리 추가 */
+    color: #333; /* 글자 색상 */
+    background-color: #ffffff; /* 배경색 */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #ff5a5f; /* 활성화된 페이지 색상 */
+    color: #ffffff; /* 활성화된 페이지 글자 색상 */
+    border-color: #ff5a5f; /* 활성화된 페이지 테두리 색상 */
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #ff5a5f; /* 호버 시 배경색 */
+    color: #ffffff; /* 호버 시 글자 색상 */
+    border-color: #ff5a5f; /* 호버 시 테두리 색상 */
+}

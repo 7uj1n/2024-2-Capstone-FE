@@ -205,8 +205,7 @@ export default ResultPage;
 // import PopulationChart from "../UI/PopulationChart";
 // import PathLeadTimeChart from "../UI/PathLeadTimeChart"; // PathLeadTimeChart 컴포넌트 가져오기
 
-// import { transformData } from '../UI/dataTransform';
-// import rawData from '../data/2024-08-19.json'; // 원본 데이터 가져오기
+// import rawData from '../data/bus_path.json'; // 원본 데이터 가져오기
 
 // const { kakao } = window;
 
@@ -241,40 +240,33 @@ export default ResultPage;
 
 //         const newPolylines = [];
 
-//         // 경로 데이터를 변환
-//         const pathData = transformData(rawData);
-
 //         // 경로 데이터를 사용하여 폴리라인 생성
-//         pathData.path.forEach(route => {
-//             if (selectedRoute && route.id !== selectedRoute) return; // 선택한 경로만 표시
+//         const linePath = rawData.map(data => new kakao.maps.LatLng(data.ARV_CELL_YCRD_first, data.ARV_CELL_XCRD_first));
 
-//             const linePath = route.coordinate.map(coord => new kakao.maps.LatLng(coord[0], coord[1]));
-
-//             // 테두리 폴리라인 생성
-//             const borderPolyline = new kakao.maps.Polyline({
-//                 path: linePath,
-//                 strokeWeight: 8, // 테두리 두께
-//                 strokeColor: '#000000', // 테두리 색상 (검정색)
-//                 strokeOpacity: 0.6, // 테두리 불투명도
-//                 strokeStyle: 'solid' // 테두리 스타일
-//             });
-
-//             // 메인 폴리라인 생성
-//             const polyline = new kakao.maps.Polyline({
-//                 path: linePath,
-//                 strokeWeight: 3, // 두께를 약간 더 두껍게 설정
-//                 strokeColor: route.type === 'exist' ? '#4682B4' : '#FF6347', // 기존 경로는 강철색, 새로운 경로는 토마토색
-//                 strokeOpacity: 0.9, // 불투명도를 약간 더 높게 설정
-//                 strokeStyle: 'solid' // 선 스타일을 실선으로 설정
-//             });
-
-//             // 테두리 폴리라인을 먼저 지도에 추가
-//             borderPolyline.setMap(map);
-//             // 메인 폴리라인을 지도에 추가
-//             polyline.setMap(map);
-
-//             newPolylines.push(borderPolyline, polyline);
+//         // 테두리 폴리라인 생성
+//         const borderPolyline = new kakao.maps.Polyline({
+//             path: linePath,
+//             strokeWeight: 8, // 테두리 두께
+//             strokeColor: '#000000', // 테두리 색상 (검정색)
+//             strokeOpacity: 0.6, // 테두리 불투명도
+//             strokeStyle: 'solid' // 테두리 스타일
 //         });
+
+//         // 메인 폴리라인 생성
+//         const polyline = new kakao.maps.Polyline({
+//             path: linePath,
+//             strokeWeight: 3, // 두께를 약간 더 두껍게 설정
+//             strokeColor: '#4682B4', // 경로 색상
+//             strokeOpacity: 0.9, // 불투명도를 약간 더 높게 설정
+//             strokeStyle: 'solid' // 선 스타일을 실선으로 설정
+//         });
+
+//         // 테두리 폴리라인을 먼저 지도에 추가
+//         borderPolyline.setMap(map);
+//         // 메인 폴리라인을 지도에 추가
+//         polyline.setMap(map);
+
+//         newPolylines.push(borderPolyline, polyline);
 
 //         // 새로운 폴리라인 상태 업데이트
 //         setPolylines(newPolylines);

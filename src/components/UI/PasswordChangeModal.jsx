@@ -26,10 +26,10 @@ function PasswordChangeModal({ show, handleClose }) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
-                    닫기
+                    취소
                 </Button>
                 <Button variant="primary" onClick={handleClose}>
-                    저장
+                    변경
                 </Button>
             </Modal.Footer>
         </Modal>

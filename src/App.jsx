@@ -11,6 +11,7 @@ import MainPage from './components/Page/MainPage';
 import PathPage from './components/Page/PathPage';
 import ResultPage from './components/Page/ResultPage';
 import MyPage from './components/Page/MyPage';
+import MyCommentsPage from './components/Page/MyCommentsPage';
 
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'; //라우터
 
@@ -30,6 +31,7 @@ function AppContent() {
         <Route path='/signup' element={<SignUpPage />} /> {/*회원가입 페이지*/}
         <Route path="/result" element={<ResultPage />} /> {/*결과 페이지*/}
         <Route path="/mypage" element={<MyPage />} /> {/*결과 페이지*/}
+        <Route path="/my-comments" element={<MyCommentsPage />} /> {/*결과 페이지*/}
       </Routes>
     </>
   );
