@@ -86,7 +86,7 @@ body, html {
 .form-header .form-check {
     display: flex;
     align-items: center;
-    gap: 3.6rem; /* 체크박스와 글자 사이 간격 추가 */
+    gap: 2.6rem; /* 체크박스와 글자 사이 간격 추가 */
 }
 
 .form-header .form-check-input {

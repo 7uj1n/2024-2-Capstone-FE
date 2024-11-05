@@ -29,9 +29,9 @@ function AppContent() {
         <Route path="/road" element={<RoadPage />} /> {/*도로 혼잡도*/}
         <Route path="/login" element={<LoginPage />} /> {/* 기본 페이지 설정 */}
         <Route path='/signup' element={<SignUpPage />} /> {/*회원가입 페이지*/}
-        <Route path="/result" element={<ResultPage />} /> {/*결과 페이지*/}
-        <Route path="/mypage" element={<MyPage />} /> {/*결과 페이지*/}
-        <Route path="/my-comments" element={<MyCommentsPage />} /> {/*결과 페이지*/}
+        <Route path="/result" element={<ResultPage />} /> {/*경로 결과 페이지*/}
+        <Route path="/mypage" element={<MyPage />} /> {/*마이 페이지 !로그인 필수*/}
+        <Route path="/my-comments" element={<MyCommentsPage />} /> {/*작성한 댓글 페이지 !로그인 필수*/}
       </Routes>
     </>
   );

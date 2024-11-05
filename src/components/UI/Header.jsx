@@ -15,7 +15,7 @@ function Header() {
                     <Nav className="mr-auto">
                         <Nav.Link as={NavLink} to="/road" className="custom-nav-link">경로 찾기</Nav.Link>
                     </Nav>
-                    <NavDropdown title="로그인" id="basic-nav-dropdown" className="custom-dropdown">
+                    <NavDropdown title="홍길동님" id="basic-nav-dropdown" className="custom-dropdown">
                         <NavDropdown.Item as={NavLink} to="/mypage" className="custom-dropdown-item">마이페이지</NavDropdown.Item>
                         <NavDropdown.Item as={NavLink} to="/logout" className="custom-dropdown-item">로그아웃</NavDropdown.Item>
                     </NavDropdown>

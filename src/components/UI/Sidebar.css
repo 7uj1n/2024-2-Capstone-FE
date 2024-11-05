@@ -1,26 +1,16 @@
-
 .sidebar {
     position: fixed;
-    /*고정 위치 */
-    top: 60px;
-    /* 헤더 아래에서 시작 */
-    left: 0;
-    /* 왼쪽 끝에 고정 */
-    width: 330px;
-    /* 사이드바 너비 */
-    height: calc(100vh - 60px);
-    /* 전체 높이에서 헤더 높이를 뺌 */
-    background-color: #f8f9fa;
-    /* 배경 색상 */
-    padding: 0px;
-    /* 패딩 추가 */
-    box-Shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
-    /* 그림자 추가 (선택 사항) */
-    z-index: 1000;
-    /* 사이드바 위에 표시되도록 z-index 추가 */
+    top: 60px; /* 헤더 아래에서 시작 */
+    left: 0; /* 왼쪽 끝에 고정 */
+    width: 330px; /* 사이드바 너비 */
+    height: 100vh; /* 전체 높이에서 헤더 높이를 뺌 */
+    background-color: #f8f9fa; /* 배경 색상 */
+    padding: 0px; /* 패딩 추가 */
+    box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1); /* 그림자 추가 (선택 사항) */
+    z-index: 1000; /* 사이드바 위에 표시되도록 z-index 추가 */
 }
 
-.sidebar h3{
+.sidebar h3 {
     text-align: left;
     font-size: 1.2rem;
     font-weight: bold;
@@ -28,7 +18,7 @@
     margin: 0;
 }
 
-.sidebar hr{
+.sidebar hr {
     margin: 0;
 }
 
@@ -40,9 +30,19 @@
 }
 
 .content.open {
-    max-height: 100%; /* 최대 높이를 설정하여 애니메이션 효과를 줍니다. */
+    max-height: 70%; /* 최대 높이를 설정하여 애니메이션 효과를 줍니다. */
     padding: 10px 0; /* 패딩 추가 */
-    background-color: #fff6f6d7;    /* 배경색 추가 */
+    background-color: #fff6f6d7; /* 배경색 추가 */
+    overflow-y: auto; /* 스크롤 설정 */
+}
+
+.content.open::-webkit-scrollbar {
+    display: none; /* 웹킷 브라우저에서 스크롤바 숨기기 */
+}
+
+.content.open {
+    -ms-overflow-style: none; /* IE 및 Edge에서 스크롤바 숨기기 */
+    scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
 }
 
 .nav-link {
@@ -52,20 +52,19 @@
     text-decoration: none; /* 밑줄 제거 */
     display: block; /* 블록 요소로 설정 */
     transition: background-color 0.3s; /* 배경색 전환 효과 */
-    font-weight: bold;  /*글자 굵게 */
-    color: black;   /*글자 색*/
+    font-weight: bold; /* 글자 굵게 */
+    color: black; /* 글자 색 */
 }
 
 .nav-link:hover {
     background-color: #e2e6ea; /* 호버 시 색상 */
-    color: black; 
+    color: black;
 }
 
 .nav-link.active {
-    background-color:#dc3545; /* 클릭된 경우 배경색 */
+    background-color: #dc3545; /* 클릭된 경우 배경색 */
     color: white; /* 텍스트 색상 변경 */
 }
-
 
 /* 모바일 및 태블릿에서 사이드바 숨기기 */
 @media (max-width: 768px) {

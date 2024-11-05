@@ -63,3 +63,9 @@ margin-left: 1.5rem; */
     text-align: center;
     margin-top: 10px;
 }
+
+.route-divider {
+    width: 100%;
+    border: 1px solid #ddd;
+    margin: 20px 0; /* 구분선 위아래로 여백 추가 */
+}

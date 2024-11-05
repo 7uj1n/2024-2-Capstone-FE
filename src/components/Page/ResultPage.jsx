@@ -12,6 +12,8 @@ import placeMarkerImage from './images/marker/place.png';
 
 const { kakao } = window;
 
+const routeColors = ['#FF6347', '#4682B4', '#32CD32', '#FFD700', '#FF69B4', '#8A2BE2']; // 경로 색상 배열
+
 function ResultPage() {
     const [map, setMap] = useState(null); // map 상태 관리
     const [polylines, setPolylines] = useState([]); // 폴리라인 상태 관리
@@ -53,7 +55,7 @@ function ResultPage() {
         const newOverlays = [];
 
         // 경로 데이터를 사용하여 폴리라인 및 마커 생성
-        pathData.path.forEach(route => {
+        pathData.path.forEach((route, index) => {
             if (selectedRoute && route.id !== selectedRoute) return; // 선택한 경로만 표시
 
             const linePath = route.coordinate.map(coord => new kakao.maps.LatLng(coord[0], coord[1]));
@@ -71,7 +73,7 @@ function ResultPage() {
             const polyline = new kakao.maps.Polyline({
                 path: linePath,
                 strokeWeight: 6, // 두께를 약간 더 두껍게 설정
-                strokeColor: route.type === 'exist' ? '#4682B4' : '#FF6347', // 기존 경로는 강철색, 새로운 경로는 토마토색
+                strokeColor: routeColors[index % routeColors.length], // 경로 색상
                 strokeOpacity: 0.9, // 불투명도를 약간 더 높게 설정
                 strokeStyle: 'solid' // 선 스타일을 실선으로 설정
             });
@@ -192,7 +194,6 @@ function ResultPage() {
 }
 
 export default ResultPage;
-
 
 
 
