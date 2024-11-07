@@ -29,6 +29,10 @@ margin-left: 1.5rem; */
     background-color: #fafafa;
     border-bottom: 1px solid #ddd;
     font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 5px;
 }
 
 .card-body {
@@ -45,16 +49,44 @@ margin-left: 1.5rem; */
     padding-right: 0;
 }
 
+/*날짜, 시간, 선택 경로 결과*/
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+    margin-right: 5px;
 }
 
 .header-container h4 {
     flex-grow: 1;
     text-align: center;
+}
+
+.result-header {
+    display: flex;
+    justify-content: flex-end;  /* 오른쪽 정렬 */
+    background-color: #ffffff; /* 배경색 흰색 */
+    border: 1px solid #ddd; /* 살짝 테두리 추가 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    padding: 1rem; /* 패딩 추가 */
+    margin-bottom: 20px; /* 아래쪽 여백 추가 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+
+.reset-button {
+    margin-right: 0px; /* 오른쪽 마진 추가 */
+}
+
+/* 경로 결과 */
+.route-feedback {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 요소 간 간격 추가 */
+}
+
+.route-title {
+    font-size: 1rem; /* 경로 제목 글자 크기 작게 설정 */
+}
+
+.like, .dislike {
+    font-size: 14px;
 }
 
 .small-text {
@@ -64,8 +96,9 @@ margin-left: 1.5rem; */
     margin-top: 10px;
 }
 
+/* new 경로 구분선 */
 .route-divider {
     width: 100%;
-    border: 1px solid #ddd;
+    border: 1px solid #6d6d6d;
     margin: 20px 0; /* 구분선 위아래로 여백 추가 */
 }

@@ -35,19 +35,26 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
         navigate('/path'); // 최적 경로 찾기 페이지로 이동
     };
 
+    const handleCommentClick = (routeId) => {
+        // 의견 달기 버튼 클릭 시 처리할 로직 추가
+        console.log(`경로 ${routeId}에 대한 의견 달기`);
+    };
+
     return (
         <div className="result-content">
-            {selectedDate && selectedTime && (
-                <h5>{selectedDate} {selectedTime}</h5>
-            )}
-            <div className="header-container">
-                <h4>{selectedRegion} 경로 결과</h4>
-                <Button variant="secondary" onClick={handleReset}>초기화</Button>
+            <div className="result-header">
+                <div className="header-container">
+                    {selectedDate && selectedTime && (
+                        <h5>{selectedDate} {selectedTime}</h5>
+                    )}
+                    <h4>{selectedRegion} 경로 결과</h4>
+                </div>
+                <Button variant="secondary" className="reset-button" onClick={handleReset}>초기화</Button>
             </div>
             {pathData.path.map((route, index) => (
                 <React.Fragment key={route.id}>
                     {route.type === 'new' && index !== 0 && (
-                        <hr className="route-divider" />
+                        <hr className="route-divider" style={{ marginBottom: 20 }} />
                     )}
                     <Card
                         className={`card ${selectedRoute === route.id ? 'selected' : ''}`}
@@ -61,11 +68,18 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
                                     width: '12px',
                                     height: '12px',
                                     backgroundColor: routeColors[index % routeColors.length],
-                                    marginRight: '10px',
+                                    marginRight: '5px', // 공백을 줄이기 위해 margin-right를 5px로 설정
                                     borderRadius: '50%'
                                 }}
                             ></span>
-                            경로 {route.id} ({route.type === 'exist' ? '기존 경로' : '새로운 경로'})
+                            <span className="route-title">
+                                경로 {route.id} ({route.type === 'exist' ? '기존 경로' : '새로운 경로'})
+                            </span>
+                            <div className="route-feedback">
+                                <span className="like">👍 {route.like}</span>
+                                <span className="dislike">👎 {route.dislike}</span>
+                                <Button variant="outline-dark" size="sm" onClick={() => handleCommentClick(route.id)}>의견 달기</Button>
+                            </div>
                         </Card.Header>
                         <Card.Body>
                             <Card.Text>소요 시간: {route.leadtime}</Card.Text>
