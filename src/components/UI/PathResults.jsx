@@ -91,7 +91,10 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
                                             alt={station.type}
                                             style={{ width: '40px', marginRight: '10px' }}
                                         />
-                                        {station.name}
+                                        <div>
+                                            <div>{station.name}</div>
+                                            <div className="station-direction">{station.direction}</div>
+                                        </div>
                                     </ListGroup.Item>
                                 ))}
                             </ListGroup>

@@ -4,6 +4,7 @@ import pathData from '../data/path.json'; // 경로 데이터 가져오기
 import useStore from '../../store/RegionStore'; // Zustand 스토어 가져오기
 import './ResultPage.css';
 import PopulationChart from "../UI/PopulationChart";
+import PopulationPieChart from "../UI/PopulationPieChart";
 import PathLeadTimeChart from "../UI/PathLeadTimeChart"; // PathLeadTimeChart 컴포넌트 가져오기
 
 import busMarkerImage from './images/marker/bus.png';
@@ -132,6 +133,7 @@ function ResultPage() {
                 overlayContent.className = 'custom-infowindow';
                 overlayContent.innerHTML = `
                     <div class="infowindow-content">${station.name}</div>
+                    <div class="pathStation-direction">${station.direction}</div>
                     <button class="infowindow-close">X</button>
                 `;
 
@@ -183,6 +185,10 @@ function ResultPage() {
                 <div className="chart-container">
                     <h4>{selectedDate} {selectedRegion}→인천공항 유동인구 수</h4>
                     <PopulationChart />
+                </div>
+                <div className="chart-container">
+                    <h4>경로별 유동인구 수 비율</h4>
+                    <PopulationPieChart />
                 </div>
                 <div className="chart-container">
                     <h4>경로별 예상 시간 비교</h4>

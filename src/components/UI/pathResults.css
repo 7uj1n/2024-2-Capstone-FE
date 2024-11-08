@@ -45,6 +45,10 @@ margin-left: 1.5rem; */
 
 .list-group-item {
     border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
     padding-left: 0;
     padding-right: 0;
 }
@@ -101,4 +105,11 @@ margin-left: 1.5rem; */
     width: 100%;
     border: 1px solid #6d6d6d;
     margin: 20px 0; /* 구분선 위아래로 여백 추가 */
+}
+
+/* 역 방향 정보 */
+.station-direction {
+    color: #4e6967; /* 연한 색상 */
+    font-size: 0.9rem; /* 글자 크기 작게 설정 */
+    display: block; /* 블록 요소로 설정하여 아래로 배치 */
 }
