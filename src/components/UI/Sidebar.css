@@ -34,6 +34,8 @@
     padding: 10px 0; /* 패딩 추가 */
     background-color: #fff6f6d7; /* 배경색 추가 */
     overflow-y: auto; /* 스크롤 설정 */
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 .content.open::-webkit-scrollbar {

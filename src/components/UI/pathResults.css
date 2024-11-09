@@ -33,6 +33,7 @@ margin-left: 1.5rem; */
     justify-content: space-between;
     align-items: center;
     padding-right: 5px;
+    padding: 7px;   /* 패딩 추가 */
 }
 
 .card-body {
@@ -112,4 +113,31 @@ margin-left: 1.5rem; */
     color: #4e6967; /* 연한 색상 */
     font-size: 0.9rem; /* 글자 크기 작게 설정 */
     display: block; /* 블록 요소로 설정하여 아래로 배치 */
+}
+
+/* 의견 달기 창 */
+
+/* 스크롤바 숨기기 */
+.comment-form-container {
+    position: fixed;
+    top: 60px; /* 헤더 높이만큼 아래로 이동 */
+    left: 333px; /* 사이드바 너비만큼 오른쪽으로 이동 */
+    width: 400px; /* 의견 달기 창 너비 */
+    height: calc(100vh - 60px); /* 헤더 높이를 뺀 전체 높이 */
+    background-color: #fff6f6; /* 배경색 흰색 */
+    border: 1px solid #ddd; /* 살짝 테두리 추가 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+    padding: 15px; /* 패딩 추가 */
+    overflow-y: auto; /* 세로 스크롤 추가 */
+    z-index: 1050; /* 사이드바 위에 표시되도록 z-index 추가 */
+}
+
+.comment-form-container::-webkit-scrollbar {
+    display: none; /* 웹킷 브라우저에서 스크롤바 숨기기 */
+}
+
+.comment-form-container {
+    -ms-overflow-style: none; /* IE 및 Edge에서 스크롤바 숨기기 */
+    scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
 }
