@@ -88,6 +88,7 @@ margin-left: 1.5rem; */
 
 .route-title {
     font-size: 1rem; /* 경로 제목 글자 크기 작게 설정 */
+    padding-left: 15px;
 }
 
 .like, .dislike {

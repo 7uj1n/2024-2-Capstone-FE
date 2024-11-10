@@ -2,6 +2,7 @@
     {
         "date": "2024-08-22",
         "name": "군자동",
+        "areaCD": "1121510900",
         "destination": "인천공항",
         "data": [
             { "time": "00시", "population": 23 },

@@ -209,7 +209,6 @@
 //버스, 지하철, 걷기 구분
 
 
-
 import { useEffect, useState, useRef } from "react";
 import SearchBar from "../MapFunction/SearchBar";
 import pathData from '../data/path2.json'; // 경로 데이터 가져오기
@@ -273,6 +272,17 @@ function ResultPage() {
             if (route.coordinate.walk) {
                 route.coordinate.walk.forEach(walkSegment => {
                     const walkPath = walkSegment.map(coord => new kakao.maps.LatLng(coord[0], coord[1]));
+
+                    // 테두리 폴리라인 생성
+                    const walkBorderPolyline = new kakao.maps.Polyline({
+                        path: walkPath,
+                        strokeWeight: 8, // 테두리 두께
+                        strokeColor: '#000000', // 테두리 색상 (검정색)
+                        strokeOpacity: 0.6, // 테두리 불투명도
+                        strokeStyle: 'solid' // 테두리 스타일
+                    });
+
+                    // 메인 폴리라인 생성
                     const walkPolyline = new kakao.maps.Polyline({
                         path: walkPath,
                         strokeWeight: 6,
@@ -280,8 +290,24 @@ function ResultPage() {
                         strokeOpacity: 0.9,
                         strokeStyle: 'solid'
                     });
+
+                    //패턴 폴리라인 생성
+                    const patternPolyline = new kakao.maps.Polyline({
+                        path: walkPath,
+                        strokeWeight: 1, // 패턴 두께
+                        strokeColor: '#FFFFFF', // 패턴 색상 (흰색)
+                        strokeOpacity: 1, // 패턴 불투명도
+                        strokeStyle: 'shortdashdot' // 패턴 스타일
+                    });
+
+                    // 테두리 폴리라인을 먼저 지도에 추가
+                    walkBorderPolyline.setMap(map);
+                    // 메인 폴리라인을 지도에 추가
                     walkPolyline.setMap(map);
-                    newPolylines.push(walkPolyline);
+                    // 패턴 폴리라인을 지도에 추가
+                    patternPolyline.setMap(map);
+
+                    newPolylines.push(walkBorderPolyline, walkPolyline, patternPolyline);
                 });
             }
 
@@ -289,15 +315,42 @@ function ResultPage() {
             if (route.coordinate.bus) {
                 route.coordinate.bus.forEach(busSegment => {
                     const busPath = busSegment.map(coord => new kakao.maps.LatLng(coord[0], coord[1]));
+
+                    // 테두리 폴리라인 생성
+                    const busBorderPolyline = new kakao.maps.Polyline({
+                        path: busPath,
+                        strokeWeight: 8, // 테두리 두께
+                        strokeColor: '#000000', // 테두리 색상 (검정색)
+                        strokeOpacity: 0.6, // 테두리 불투명도
+                        strokeStyle: 'solid' // 테두리 스타일
+                    });
+
+                    // 메인 폴리라인 생성
                     const busPolyline = new kakao.maps.Polyline({
                         path: busPath,
                         strokeWeight: 6,
-                        strokeColor: '#ADFF2F', // 버스 경로 색상 (연두색)
+                        strokeColor: '#48b751', // 버스 경로 색상 (연두색)
                         strokeOpacity: 0.9,
                         strokeStyle: 'solid'
                     });
+
+                    //패턴 폴리라인 생성
+                    const patternPolyline = new kakao.maps.Polyline({
+                        path: busPath,
+                        strokeWeight: 1, // 패턴 두께
+                        strokeColor: '#FFFFFF', // 패턴 색상 (흰색)
+                        strokeOpacity: 1, // 패턴 불투명도
+                        strokeStyle: 'shortdashdot' // 패턴 스타일
+                    });
+
+                    // 테두리 폴리라인을 먼저 지도에 추가
+                    busBorderPolyline.setMap(map);
+                    // 메인 폴리라인을 지도에 추가
                     busPolyline.setMap(map);
-                    newPolylines.push(busPolyline);
+                    // 패턴 폴리라인을 지도에 추가
+                    patternPolyline.setMap(map);
+
+                    newPolylines.push(busBorderPolyline, busPolyline, patternPolyline);
                 });
             }
 
@@ -305,6 +358,17 @@ function ResultPage() {
             if (route.coordinate.subway) {
                 route.coordinate.subway.forEach(subwaySegment => {
                     const subwayPath = subwaySegment.map(coord => new kakao.maps.LatLng(coord[0], coord[1]));
+
+                    // 테두리 폴리라인 생성
+                    const subwayBorderPolyline = new kakao.maps.Polyline({
+                        path: subwayPath,
+                        strokeWeight: 8, // 테두리 두께
+                        strokeColor: '#000000', // 테두리 색상 (검정색)
+                        strokeOpacity: 0.6, // 테두리 불투명도
+                        strokeStyle: 'solid' // 테두리 스타일
+                    });
+
+                    // 메인 폴리라인 생성
                     const subwayPolyline = new kakao.maps.Polyline({
                         path: subwayPath,
                         strokeWeight: 6,
@@ -312,8 +376,24 @@ function ResultPage() {
                         strokeOpacity: 0.9,
                         strokeStyle: 'solid'
                     });
+
+                    //패턴 폴리라인 생성
+                    const patternPolyline = new kakao.maps.Polyline({
+                        path: subwayPath,
+                        strokeWeight: 1, // 패턴 두께
+                        strokeColor: '#FFFFFF', // 패턴 색상 (흰색)
+                        strokeOpacity: 1, // 패턴 불투명도
+                        strokeStyle: 'shortdashdot' // 패턴 스타일
+                    });
+
+                    // 테두리 폴리라인을 먼저 지도에 추가
+                    subwayBorderPolyline.setMap(map);
+                    // 메인 폴리라인을 지도에 추가
                     subwayPolyline.setMap(map);
-                    newPolylines.push(subwayPolyline);
+                    // 패턴 폴리라인을 지도에 추가
+                    patternPolyline.setMap(map);
+
+                    newPolylines.push(subwayBorderPolyline, subwayPolyline, patternPolyline);
                 });
             }
 
@@ -436,7 +516,6 @@ function ResultPage() {
 }
 
 export default ResultPage;
-
 
 
 //원본 파일 시각화 해보기

@@ -61,8 +61,12 @@ const CommentForm = ({ route, onClose }) => {
                         <div className="comment-header">
                             <span className="comment-author">{comment.author}</span>
                             <span className="comment-date">{comment.date}</span>
-                            <Button variant="outline-secondary" className="comment-edit">수정</Button>
-                            <Button variant="outline-danger" className="comment-delete">삭제</Button>
+                            {comment.author === '홍길동' && (
+                                <>
+                                    <Button variant="outline-secondary" className="comment-edit">수정</Button>
+                                    <Button variant="outline-danger" className="comment-delete">삭제</Button>
+                                </>
+                            )}
                         </div>
                         <p>{comment.content}</p>
                     </div>

@@ -207,7 +207,7 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
                         style={{ cursor: 'pointer' }}
                     >
                         <Card.Header>
-                            <span
+                            {/* <span
                                 style={{
                                     display: 'inline-block',
                                     width: '12px',
@@ -216,7 +216,7 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
                                     marginRight: '5px', // 공백을 줄이기 위해 margin-right를 5px로 설정
                                     borderRadius: '50%'
                                 }}
-                            ></span>
+                            ></span> */}
                             <span className="route-title">
                                 경로 {route.id} ({route.type === 'exist' ? '기존 경로' : '새로운 경로'})
                             </span>
