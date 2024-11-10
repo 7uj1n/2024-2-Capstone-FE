@@ -39,11 +39,16 @@
 }
 
 .thumbs button {
-    background-color: transparent;
+    /* background-color: transparent; */
     border: none;
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
+    height: 70px;
+}
+
+.thumbs button.active {
+    background-color: #d3d3d3; /* 클릭된 버튼의 배경색 */
 }
 
 .comment-form-body {

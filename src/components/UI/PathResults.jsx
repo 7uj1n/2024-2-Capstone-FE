@@ -149,6 +149,7 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
     const setSelectedDateTime = useStore(state => state.setSelectedDateTime); // 선택한 날짜와 시간 변경 함수 가져오기
     const setSelectedRegion = useStore(state => state.setSelectedRegion); // 선택한 지역 변경 함수 가져오기
     const setSelectedRouteStore = useStore(state => state.setSelectedRoute); // 선택한 경로 변경 함수 가져오기
+    const routes = useStore(state => state.routes); // 경로 데이터 가져오기
     const navigate = useNavigate(); // useNavigate 훅 사용
 
     const handleRouteClick = (routeId) => {
@@ -196,7 +197,7 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
                 </div>
                 <Button variant="secondary" className="reset-button" onClick={handleReset}>초기화</Button>
             </div>
-            {pathData.path.map((route, index) => (
+            {routes.map((route, index) => (
                 <React.Fragment key={route.id}>
                     {route.type === 'new' && index !== 0 && (
                         <hr className="route-divider" style={{ marginBottom: 20 }} />
@@ -207,16 +208,6 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
                         style={{ cursor: 'pointer' }}
                     >
                         <Card.Header>
-                            {/* <span
-                                style={{
-                                    display: 'inline-block',
-                                    width: '12px',
-                                    height: '12px',
-                                    backgroundColor: routeColors[index % routeColors.length],
-                                    marginRight: '5px', // 공백을 줄이기 위해 margin-right를 5px로 설정
-                                    borderRadius: '50%'
-                                }}
-                            ></span> */}
                             <span className="route-title">
                                 경로 {route.id} ({route.type === 'exist' ? '기존 경로' : '새로운 경로'})
                             </span>
