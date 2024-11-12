@@ -9,10 +9,14 @@ const PathLeadTimeChart = () => {
         return hours * 60 + minutes;
     };
 
+    // 색상 배열
+    const colors = ['#fbb4ae', '#b3cde3', '#ccebc5', '#decbe4', '#fed9a6', '#fed9a6', '#fed9a6', '#fed9a6', '#f2f2f2'];
+
     // 데이터를 Nivo 차트 형식에 맞게 변환
-    const data = pathData.path.map(route => ({
+    const data = pathData.path.map((route, index) => ({
         route: `경로 ${route.id}`,
-        leadtime: convertLeadTimeToMinutes(route.leadtime)
+        leadtime: convertLeadTimeToMinutes(route.leadtime),
+        color: colors[index % colors.length] // 색상 배열에서 색상 선택
     }));
 
     return (
@@ -25,7 +29,7 @@ const PathLeadTimeChart = () => {
                 padding={0.3} // 막대 간격 설정
                 valueScale={{ type: 'linear' }} // y축 스케일 설정
                 indexScale={{ type: 'band', round: true }} // x축 스케일 설정
-                colors={{ scheme: 'paired' }} // 색상 팔레트 설정
+                colors={({ data }) => data.color} // 데이터 색상 설정
                 borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }} // 막대 테두리 색상 설정
                 axisTop={null} // 상단 축 비활성화
                 axisRight={null} // 오른쪽 축 비활성화
@@ -75,7 +79,6 @@ const PathLeadTimeChart = () => {
                 animate={true} // 애니메이션 활성화
                 motionStiffness={90} // 애니메이션 강성 설정
                 motionDamping={15} // 애니메이션 감쇠 설정
-                legends={[]} // 범례 제거
             />
         </div>
     );

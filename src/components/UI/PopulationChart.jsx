@@ -54,7 +54,7 @@ const PopulationChart = () => {
                 pointBorderColor={{ from: 'serieColor' }} // 데이터 포인트 테두리 색상 설정
                 pointLabelYOffset={-12} // 데이터 포인트 라벨 Y 오프셋 설정
                 useMesh={true} // 메쉬 사용 설정 (툴팁 활성화)
-                colors={{ scheme: 'category10' }} //그래프 색 설정
+                colors={{ scheme: 'tableau10' }} //그래프 색 설정 'dark2' 'pastel1' 'tableau10'
                 legends={[]} // 범례 제거
             />
         </div>

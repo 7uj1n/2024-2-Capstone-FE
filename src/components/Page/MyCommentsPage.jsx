@@ -47,6 +47,13 @@ function CommentList() {
         }
     };
 
+    const handleDeleteSelected = () => {  // 선택된 댓글 삭제
+        if (window.confirm("삭제하시겠습니까?")) {
+            setComments(comments.filter(comment => !comment.checked));
+            setSelectAll(false); // 전체 선택 체크박스 해제
+        }
+    };
+
     const renderPaginationItems = () => {
         const startPage = pageGroup * pagesPerGroup + 1;
         const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
@@ -70,7 +77,7 @@ function CommentList() {
                         <div className="form-check">
                             <Form.Check type="checkbox" label="전체 선택" checked={selectAll} onChange={handleSelectAll} />
                         </div>
-                        <Button variant="dark">삭제</Button>
+                        <Button variant="dark" onClick={handleDeleteSelected}>삭제</Button>
                     </div>
                     <hr />
                     {comments.map((comment, index) => (
