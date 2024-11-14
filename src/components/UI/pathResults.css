@@ -64,6 +64,10 @@ margin-left: 1.5rem; */
     text-align: center;
 }
 
+.header-container h5 {
+    font-size: 1.2rem;
+}
+
 .result-header {
     display: flex;
     justify-content: flex-end;  /* 오른쪽 정렬 */

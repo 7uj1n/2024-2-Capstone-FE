@@ -6,7 +6,7 @@ const useStore = create((set) => ({
     selectedRegionCD: '', // 선택한 지역 코드 기본 값
     selectedDate: null, // 선택한 날짜 기본 값
     selectedTime: null, // 선택한 시간 기본 값
-    selectedRoute: pathData.path[0].id, // 선택한 경로 기본 값을 첫 번째 경로로 설정
+    selectedRoute: null, // 선택한 경로 기본 값을 첫 번째 경로로 설정
     routes: pathData.path, // 경로 데이터
     setSelectedRegion: (region, regionCD) => set({ selectedRegion: region, selectedRegionCD: regionCD }), // 선택한 지역, 코드 변경
     setSelectedDateTime: (date, time) => set({ selectedDate: date, selectedTime: time }), // 선택한 날짜와 시간 변경

@@ -52,7 +52,7 @@ function LoginPage() {
     return (
         <div className="login-container">
             <div className="login-form">
-                <h2 className="login-title">로그인</h2>
+                <h3 className="login-title">로그인</h3>
                 <Form onSubmit={handleLogin}>
                     <div className="floating-label-group">
                         <Form.Control type="email" id="formBasicEmail" placeholder=" " required />
@@ -69,8 +69,7 @@ function LoginPage() {
                         로그인
                     </Button>
                     <div className="login-links">
-                        <NavLink to="/signup">회원가입</NavLink>
-                        {/* | <NavLink to="/forgot-password">비밀번호 찾기</NavLink> */}
+                        <NavLink to="/signup">회원가입</NavLink> | <NavLink to="/forgot-password">비밀번호 찾기</NavLink>
                     </div>
                 </Form>
             </div>

@@ -15,7 +15,7 @@ function SignUpPage() {
             <Container className="signup-form">
                 <Row>
                     <Col md={12}>
-                        <h2 className="signup-title">회원가입</h2>
+                        <h3 className="signup-title">회원가입</h3>
 
                         <Form onSubmit={handleSignup}>
                             <div className="floating-label-group">
