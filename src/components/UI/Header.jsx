@@ -1,11 +1,33 @@
+import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/Nav';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import useStore from '../../store/UserStore';
 import './header.css'; // 커스텀 CSS 파일 추가
 
 function Header() {
+    const navigate = useNavigate();
+    const token = useStore((state) => state.token);
+    const username = useStore((state) => state.username);
+    const clearAuth = useStore((state) => state.clearAuth);
+
+    const handleLogout = () => {
+        const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
+        if (confirmLogout) {
+            // 로컬 스토리지에서 토큰과 만료 시간 제거
+            localStorage.removeItem('token');
+            localStorage.removeItem('expiresIn');
+
+            // Zustand 스토어에서 사용자 정보 제거
+            clearAuth();
+
+            // 로그아웃 후 로그인 페이지로 이동
+            navigate('/login');
+        }
+    };
+
     return (
         <Navbar fixed="top" expand="lg" className="navbar navbar-expand-lg bg-danger">
             <Container fluid>   {/*좌우 끝으로 가게*/}
@@ -15,10 +37,14 @@ function Header() {
                     <Nav className="mr-auto">
                         <Nav.Link as={NavLink} to="/road" className="custom-nav-link">경로 찾기</Nav.Link>
                     </Nav>
-                    <NavDropdown title="홍길동님" id="basic-nav-dropdown" className="custom-dropdown">
-                        <NavDropdown.Item as={NavLink} to="/mypage" className="custom-dropdown-item">마이페이지</NavDropdown.Item>
-                        <NavDropdown.Item as={NavLink} to="/logout" className="custom-dropdown-item">로그아웃</NavDropdown.Item>
-                    </NavDropdown>
+                    {token ? (
+                        <NavDropdown title={`${username}님`} id="basic-nav-dropdown" className="custom-dropdown">
+                            <NavDropdown.Item as={NavLink} to="/mypage" className="custom-dropdown-item">마이페이지</NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleLogout} className="custom-dropdown-item">로그아웃</NavDropdown.Item>
+                        </NavDropdown>
+                    ) : (
+                        <Nav.Link as={NavLink} to="/login" className="custom-nav-link" style={{padding: "8px"}}>로그인</Nav.Link>
+                    )}
                 </Navbar.Collapse>
             </Container>
         </Navbar>

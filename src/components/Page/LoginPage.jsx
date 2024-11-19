@@ -1,52 +1,70 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, NavLink } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import useStore from '../../store/UserStore';
 import './LoginPage.css';
 
 function LoginPage() {
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
+    const setToken = useStore((state) => state.setToken);
+    const setExpiresIn = useStore((state) => state.setExpiresIn);
+    const setUsername = useStore((state) => state.setUsername);
+    const setIsAuthenticated = useStore((state) => state.setIsAuthenticated);
 
     const handleLogin = async (event) => {
         event.preventDefault();
+        const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
         const email = event.target.formBasicEmail.value;
         const password = event.target.formBasicPassword.value;
 
-        try {   //원래 post로 받아야함. APi 구현 뒤 수정할 예정 + 로그인 유지 구현(JWT)
-            const response = await axios.get('https://jsonplaceholder.typicode.com/users');
-            const users = response.data;
+        try {
+            const response = await axios.post(`${apiUrl}/api/auth/login`, {    //로그인 요청
+                email,
+                password
+            });
 
-            const user = users.find(user => user.email === email && user.username === password);
+            console.log('로그인 성공:', response.data);
 
-            if (user) {
+            if (response.status === 200) {    //로그인 성공
+                const { jwt, expiresIn, username } = response.data;
+
+                // JWT 토큰과 만료 시간을 로컬 스토리지에 저장
+                localStorage.setItem('token', jwt);
+                // 현재 시간 + 만료 시간 계산 후 저장
+                const expirationTime = new Date().getTime() + expiresIn * 1000;
+                localStorage.setItem('expiresIn', expirationTime);
+
+                // Zustand 스토어에 사용자 정보 저장
+                setToken(jwt);
+                setExpiresIn(expiresIn);
+                setUsername(username);
+                setIsAuthenticated(true);
+
                 navigate('/road');
-            } else {
+            } else {    //로그인 실패
                 setErrorMessage('로그인에 실패했습니다. 이메일 또는 비밀번호를 확인하세요.');
             }
         } catch (error) {
-            setErrorMessage('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
+            // 401 오류와 기타 서버 오류 구분
+            if (error.response) {
+                if (error.response.status === 401) {
+                    // 401 Unauthorized 처리
+                    setErrorMessage('이메일 또는 비밀번호가 잘못되었습니다.');
+                } else {
+                    // 다른 서버 오류 처리
+                    console.error('서버 오류 상태 코드:', error.response.status);
+                    setErrorMessage('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
+                }
+            } else {
+                // 네트워크 오류 또는 기타 오류 처리
+                console.error('네트워크 오류 또는 알 수 없는 오류:', error.message);
+                setErrorMessage('네트워크 오류가 발생했습니다. 인터넷 연결을 확인하세요.');
+            }
         }
-
-        //try {
-        // const response = await axios.post('https://jsonplaceholder.typicode.com/users', {    //로그인 요청
-        // email,
-        // password
-        // });
-
-        // if (response.data.success) {    //로그인 성공
-        // navigate('/road');
-        // } else {    //로그인 실패
-        // console.log(email, password);
-        // setErrorMessage('로그인에 실패했습니다. 이메일 또는 비밀번호를 확인하세요.');
-        // }
-        // } catch (error) {   //서버 오류
-        // setErrorMessage('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
-        // }
-
-        // navigate('/road');
-        // };
     };
 
     return (

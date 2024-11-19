@@ -1,13 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Container, Row, Col } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './SignUpPage.css';
 
 function SignUpPage() {
-    const handleSignup = (event) => {
+    const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+
+    const handleSignup = async (event) => {
         event.preventDefault();
-        // axios.post로 회원가입 요청 보내기. Api 구현 후 수정예정
+
+        const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
+        const email = event.target.formBasicEmail.value;
+        const username = event.target.formBasicName.value;
+        const password = event.target.formBasicPassword.value;
+        const passwordconfirm = event.target.formBasicConfirmPassword.value;
+
+        // 비밀번호와 비밀번호 확인이 다를 경우 오류 메시지 표시
+        if (password !== passwordconfirm) {
+            setErrorMessage('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+            setSuccessMessage('');
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${apiUrl}/api/auth/signup`, {
+                email,
+                username,
+                password,
+                passwordconfirm
+            });
+
+            console.log('회원가입 성공:', response.data);
+
+            if (response.status === 200) {    //회원가입 성공
+                setSuccessMessage('회원가입이 성공적으로 완료되었습니다.');
+                setErrorMessage('');
+                alert('회원가입이 성공적으로 완료되었습니다.');
+                navigate('/login');
+            } else {    //회원가입 실패
+                console.log('회원가입 실패:', response.data.message);
+                setErrorMessage('회원가입에 실패했습니다. 다시 시도해주세요.');
+                setSuccessMessage('');
+            }
+        } catch (error) {   //서버 오류
+            if (error.response && error.response.status === 400) {
+                // 400 Bad Request 처리
+                setErrorMessage(error.response.data.message);
+            } else {
+                console.error('회원가입 중 오류 발생:', error);
+                setErrorMessage('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
+            }
+            setSuccessMessage('');
+        }
     };
 
     return (
@@ -37,6 +86,9 @@ function SignUpPage() {
                                 <Form.Control type="password" id="formBasicConfirmPassword" placeholder=" " required />
                                 <Form.Label htmlFor="formBasicConfirmPassword">비밀번호 확인</Form.Label>
                             </div>
+
+                            {errorMessage && <p className="error-message">{errorMessage}</p>}
+                            {successMessage && <p className="success-message">{successMessage}</p>}
 
                             <Button className="btn" variant="danger" type="submit">
                                 회원가입
