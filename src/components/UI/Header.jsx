@@ -19,6 +19,7 @@ function Header() {
             // 로컬 스토리지에서 토큰과 만료 시간 제거
             localStorage.removeItem('token');
             localStorage.removeItem('expiresIn');
+            localStorage.removeItem('username');
 
             // Zustand 스토어에서 사용자 정보 제거
             clearAuth();

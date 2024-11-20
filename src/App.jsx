@@ -15,7 +15,7 @@ import MyCommentsPage from './components/Page/MyCommentsPage';
 
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'; //라우터
 import ForgotPassword from './components/Page/ForgotPassword';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useStore from './store/UserStore';
 
 function AppContent() {
@@ -25,12 +25,13 @@ function AppContent() {
   const setToken = useStore((state) => state.setToken);
   const setExpiresIn = useStore((state) => state.setExpiresIn);
   const setUsername = useStore((state) => state.setUsername);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const expiresIn = localStorage.getItem('expiresIn');
     const username = localStorage.getItem('username');
-    if (token && expiresIn) {
+    if (token && expiresIn && username) {
       const expirationTime = parseInt(expiresIn, 10);
       if (new Date().getTime() < expirationTime) {
         setToken(token);
@@ -39,6 +40,7 @@ function AppContent() {
         setIsAuthenticated(true);
       }
     }
+    setIsAuthChecked(true);
   }, [setIsAuthenticated, setToken, setExpiresIn, setUsername]);
 
   const PrivateRoute = ({ element }) => {
@@ -49,6 +51,10 @@ function AppContent() {
       return <Navigate to="/login" />;
     }
   };
+
+  if (!isAuthChecked) {
+    return null; // 인증 여부를 확인하기 전에는 아무것도 렌더링하지 않음
+  }
 
   const showSidebar = isAuthenticated && (location.pathname === '/path' || location.pathname === '/road' || location.pathname === '/result');
 

@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, Button, Pagination } from 'react-bootstrap';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MyCommentsPage.css'; // 커스텀 CSS 파일 추가
+import useStore from '../../store/UserStore';
 
 function CommentList() {
-    const [comments, setComments] = useState([
-        { id: 1, text: "이 경로 엄청 빨라요~~", date: "2024-10-08 14:43", route: "2024-08-22 오후 1시 중앙동 경로 1 (기존 경로)", checked: false },
-        { id: 2, text: "좋을 것 같네요 더 빨리 갈듯ㅋㅋ", date: "2024-10-07 14:43", route: "2024-08-22 오후 1시 중앙동 경로 3 (새로운 경로)", checked: false },
-        { id: 3, text: "이 경로 엄청 빨라요~~", date: "2024-10-01 14:43", route: "2024-08-22 오후 1시 중앙동 경로 1 (기존 경로)", checked: false },
-        { id: 4, text: "제가 이렇게 다니는데 차 막혀요", date: "2024-10-01 14:03", route: "2024-08-25 오후 4시 군자동 경로 2 (기존 경로)", checked: false },
-        { id: 5, text: "제가 이렇게 다니는데 차 막혀요", date: "2024-10-01 14:02", route: "2024-08-25 오후 4시 군자동 경로 2 (기존 경로)", checked: false },
-    ]);
-
+    const [comments, setComments] = useState([]);
     const [selectAll, setSelectAll] = useState(false);  // 전체 선택 체크박스 상태
     const [currentPage, setCurrentPage] = useState(1);  // 현재 페이지 상태
     const [pageGroup, setPageGroup] = useState(0);  // 페이지 그룹 상태
-
-    const totalPages = 8;  // 총 페이지 수
+    const [totalPages, setTotalPages] = useState(1);  // 총 페이지 수
     const pagesPerGroup = 5;  // 한 그룹당 페이지 수
+
+    const token = useStore((state) => state.token);
+
+    useEffect(() => {
+        const fetchComments = async () => {
+            const apiUrl = import.meta.env.VITE_API_BASE_URL;
+            try {
+                const response = await axios.get(`${apiUrl}/api/comments/user?page=${currentPage - 1}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setComments(response.data.content);
+                setTotalPages(response.data.totalPages);
+            } catch (error) {
+                console.error('댓글을 가져오는 중 오류 발생:', error);
+            }
+        };
+
+        fetchComments();
+    }, [currentPage, token]);
 
     const handleSelectAll = () => { // 전체 선택 체크박스 클릭 시
         const newSelectAll = !selectAll;
@@ -26,7 +41,7 @@ function CommentList() {
     };
 
     const handleCheckboxChange = (id) => {  // 개별 체크박스 클릭 시
-        setComments(comments.map(comment => comment.id === id ? { ...comment, checked: !comment.checked } : comment));
+        setComments(comments.map(comment => comment.comment_id === id ? { ...comment, checked: !comment.checked } : comment));
     };
 
     const handlePageChange = (page) => {  // 페이지 변경 시
@@ -80,23 +95,27 @@ function CommentList() {
                         <Button variant="dark" onClick={handleDeleteSelected}>삭제</Button>
                     </div>
                     <hr />
-                    {comments.map((comment, index) => (
-                        <React.Fragment key={comment.id}>
-                            <Row className="comment-row mb-3">
-                                <Col xs={1}>
-                                    <Form.Check type="checkbox" checked={comment.checked} onChange={() => handleCheckboxChange(comment.id)} />
-                                </Col>
-                                <Col xs={9}>
-                                    <div className="fw-bold comment-text">{comment.text}</div>
-                                    <div className="comment-route">{comment.route}</div>
-                                </Col>
-                                <Col xs={2} className="text-end text-muted comment-date">
-                                    {comment.date}
-                                </Col>
-                            </Row>
-                            {index < comments.length - 1 && <div className="comment-divider"></div>}
-                        </React.Fragment>
-                    ))}
+                    {comments.length === 0 ? (
+                        <div className="text-center text-muted">댓글이 존재하지 않습니다.</div>
+                    ) : (
+                        comments.map((comment, index) => (
+                            <React.Fragment key={comment.comment_id}>
+                                <Row className="comment-row mb-3">
+                                    <Col xs={1}>
+                                        <Form.Check type="checkbox" checked={comment.checked || false} onChange={() => handleCheckboxChange(comment.comment_id)} />
+                                    </Col>
+                                    <Col xs={9}>
+                                        <div className="fw-bold comment-text">{comment.content}</div>
+                                        <div className="comment-route">{comment.routeName}</div>
+                                    </Col>
+                                    <Col xs={2} className="text-end text-muted comment-date">
+                                        {new Date(comment.updated_time).toLocaleString()}
+                                    </Col>
+                                </Row>
+                                {index < comments.length - 1 && <div className="comment-divider"></div>}
+                            </React.Fragment>
+                        ))
+                    )}
                 </Form>
             </Card>
 

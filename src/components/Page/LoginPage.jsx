@@ -37,6 +37,7 @@ function LoginPage() {
                 // 현재 시간 + 만료 시간 계산 후 저장
                 const expirationTime = new Date().getTime() + expiresIn * 1000;
                 localStorage.setItem('expiresIn', expirationTime);
+                localStorage.setItem('username', username);
 
                 // Zustand 스토어에 사용자 정보 저장
                 setToken(jwt);
