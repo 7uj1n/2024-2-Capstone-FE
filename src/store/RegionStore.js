@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import pathData from '../components/data/path2.json'; // 경로 데이터 가져오기
 
-const useStore = create((set) => ({
+const useRegionStore = create((set) => ({
     selectedRegion: '', // 선택한 지역 기본 값
     selectedRegionCD: '', // 선택한 지역 코드 기본 값
     selectedDate: null, // 선택한 날짜 기본 값
@@ -16,7 +16,8 @@ const useStore = create((set) => ({
     })), // 경로의 좋아요 수 업데이트
     updateRouteDislikes: (routeId, dislikes) => set((state) => ({
         routes: state.routes.map(route => route.id === routeId ? { ...route, dislike: dislikes } : route)
-    })) // 경로의 싫어요 수 업데이트
+    })), // 경로의 싫어요 수 업데이트
+    clearRegionSelection: () => set({ selectedRegion: '', selectedRegionCD: '', selectedDate: null, selectedTime: null, selectedRoute: null }) // 지역 선택 상태 초기화
 }));
 
-export default useStore;
+export default useRegionStore;

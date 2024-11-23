@@ -5,6 +5,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/Nav';
 import { NavLink, useNavigate } from 'react-router-dom';
 import useStore from '../../store/UserStore';
+import useRegionStore from '../../store/RegionStore';
 import './header.css'; // 커스텀 CSS 파일 추가
 
 function Header() {
@@ -12,6 +13,7 @@ function Header() {
     const token = useStore((state) => state.token);
     const username = useStore((state) => state.username);
     const clearAuth = useStore((state) => state.clearAuth);
+    const clearRegionSelection = useRegionStore((state) => state.clearRegionSelection);
 
     const handleLogout = () => {
         const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
@@ -21,8 +23,9 @@ function Header() {
             localStorage.removeItem('expiresIn');
             localStorage.removeItem('username');
 
-            // Zustand 스토어에서 사용자 정보 제거
+            // Zustand 스토어에서 사용자 정보 및 지역 선택 상태 제거
             clearAuth();
+            clearRegionSelection();
 
             // 로그아웃 후 로그인 페이지로 이동
             navigate('/login');
