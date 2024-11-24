@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CustomModal from '../UI/CustomModal'; // CustomModal 컴포넌트 가져오기
 import './LoginPage.css'; // 로그인 페이지와 동일한 스타일 적용
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [message, setMessage] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -27,8 +30,8 @@ const ForgotPassword = () => {
             console.log('성공', response.data);
 
             if (response.status === 200) {
-                alert(response.data.message);
-                navigate('/login');
+                setModalContent(response.data.message);
+                setShowModal(true);
             } else {
                 setMessage('비밀번호 찾기에 실패했습니다. 다시 시도해주세요.');
             }
@@ -41,6 +44,11 @@ const ForgotPassword = () => {
                 setMessage('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
             }
         }
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        navigate('/login');
     };
 
     return (
@@ -79,6 +87,16 @@ const ForgotPassword = () => {
                 </Form>
                 {message && <p className="mt-3">{message}</p>}
             </div>
+
+            <CustomModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                handleConfirm={handleCloseModal}
+                title="알림"
+                body={modalContent}
+                confirmText="확인"
+                cancelText=""
+            />
         </div>
     );
 };

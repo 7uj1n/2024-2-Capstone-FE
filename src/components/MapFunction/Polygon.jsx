@@ -4,7 +4,8 @@ import emd from '../data/emd_WGS84.json';
 
 import './customoverlay.css';
 import useStore from '../../store/RegionStore'; // Zustand 스토어 가져오기
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import CustomModal from '../UI/CustomModal'; // CustomModal 컴포넌트 가져오기
 
 const { kakao } = window;
 
@@ -19,52 +20,78 @@ function Polygon({ map }) {
 
     const setSelectedRegion = useStore((state) => state.setSelectedRegion); // Zustand 스토어에서 상태 업데이트 함수 가져오기
 
-    init(); // 초기 폴리곤 생성
-    kakao.maps.event.addListener(map, 'zoom_changed', function () {
-        const level = map.getLevel();
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
 
-        if (!detailMode && !sebuDetail && level <= 10) {    //시구->시군구
-            if (level <= 7) {
-                detailMode = true;
-                sebuDetail = true;
-                removePolygon();
-                data = emd.features; // 법정동 행정구역 데이터
-                init();
-            } else {
-                detailMode = true;
-                sebuDetail = false;
-                removePolygon();
-                data = sig.features; // 시군구 데이터
-                init();
-            }
-        } else if (detailMode && !sebuDetail && level > 10) {  //시군구->시구
-            detailMode = false;
-            sebuDetail = false;
-            removePolygon();
-            data = ctp.features; //시구 행정구역 데이터
-            init();
-        }
-        else if (detailMode && !sebuDetail && level <= 7) { //시군구->법정동
-            sebuDetail = true;
-            removePolygon();
-            data = emd.features; // 시군구 데이터
-            init();
-        }
-        else if (detailMode && sebuDetail && level > 7) {    //법정동->시군구
-            if (level > 10) {
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    const handleConfirmModal = () => {
+        setShowModal(false);
+    };
+
+    useEffect(() => {
+        init(); // 초기 폴리곤 생성
+
+        kakao.maps.event.addListener(map, 'zoom_changed', function () {
+            const level = map.getLevel();
+
+            if (!detailMode && !sebuDetail && level <= 10) {    //시구->시군구
+                if (level <= 7) {
+                    detailMode = true;
+                    sebuDetail = true;
+                    removePolygon();
+                    data = emd.features; // 법정동 행정구역 데이터
+                    init();
+                } else {
+                    detailMode = true;
+                    sebuDetail = false;
+                    removePolygon();
+                    data = sig.features; // 시군구 데이터
+                    init();
+                }
+            } else if (detailMode && !sebuDetail && level > 10) {  //시군구->시구
                 detailMode = false;
                 sebuDetail = false;
                 removePolygon();
-                data = ctp.features; // 시구 행정구역 데이터
-                init();
-            } else {
-                sebuDetail = false;
-                removePolygon();
-                data = sig.features; // 기본 행정구역 데이터
+                data = ctp.features; //시구 행정구역 데이터
                 init();
             }
-        }
-    });
+            else if (detailMode && !sebuDetail && level <= 7) { //시군구->법정동
+                sebuDetail = true;
+                removePolygon();
+                data = emd.features; // 시군구 데이터
+                init();
+            }
+            else if (detailMode && sebuDetail && level > 7) {    //법정동->시군구
+                if (level > 10) {
+                    detailMode = false;
+                    sebuDetail = false;
+                    removePolygon();
+                    data = ctp.features; // 시구 행정구역 데이터
+                    init();
+                } else {
+                    sebuDetail = false;
+                    removePolygon();
+                    data = sig.features; // 기본 행정구역 데이터
+                    init();
+                }
+            }
+        });
+
+        // 전역 함수로 setSelectedRegion 설정
+        window.setSelectedRegion = setSelectedRegion;
+        window.showRegionSelectedModal = (name) => {
+            setModalContent(`선택한 지역: ${name}`);
+            setShowModal(true);
+        };
+
+        return () => {
+            kakao.maps.event.removeListener(map, 'zoom_changed');
+            removePolygon();
+        };
+    }, [map]);
 
     function createPolygon(path, name, cd) {
         const polygon = new kakao.maps.Polygon({
@@ -121,7 +148,7 @@ function Polygon({ map }) {
                     <div class="infowindow-content">
                         <strong>${name}</strong>
                         <br />
-                        <button class="infowindow-select" onclick="window.setSelectedRegion('${name}', '${cd}'); alert('선택한 지역: ${name}');">선택하기</button>
+                        <button class="infowindow-select" onclick="window.setSelectedRegion('${name}', '${cd}'); window.showRegionSelectedModal('${name}');">선택하기</button>
                     </div>
                     <button class="infowindow-close">X</button>
                 `;
@@ -176,8 +203,19 @@ function Polygon({ map }) {
         polygons = []; // 폴리곤 배열 초기화
     };
 
-    // 전역 함수로 setSelectedRegion 설정
-    window.setSelectedRegion = setSelectedRegion;
+    return (
+        <>
+            <CustomModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                handleConfirm={handleConfirmModal}
+                title="알림"
+                body={modalContent}
+                confirmText="확인"
+                cancelText=""
+            />
+        </>
+    );
 }
 
 export default Polygon;

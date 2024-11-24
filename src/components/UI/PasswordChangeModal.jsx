@@ -3,12 +3,16 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import './PasswordChangeModal.css'; // 커스텀 CSS 파일 추가
 import useStore from '../../store/UserStore';
+import CustomModal from './CustomModal'; // CustomModal 컴포넌트 가져오기
 
 function PasswordChangeModal({ show, handleClose }) {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
+
+    const [showAlertModal, setShowAlertModal] = useState(false);
+    const [alertModalContent, setAlertModalContent] = useState('');
 
     const token = useStore((state) => state.token);
 
@@ -20,12 +24,10 @@ function PasswordChangeModal({ show, handleClose }) {
             return;
         }
 
-        
         if (newPassword !== confirmPassword) {
             setMessage('새 비밀번호와 비밀번호 확인이 일치하지 않습니다.');
             return;
         }
-
 
         console.log('요청 데이터:', {   // 요청 데이터 확인
             password: currentPassword,
@@ -45,8 +47,8 @@ function PasswordChangeModal({ show, handleClose }) {
             });
 
             if (response.status === 200) {
-                alert(response.data.messsage);
-                handleClose();
+                setAlertModalContent(response.data.messsage);
+                setShowAlertModal(true);
             } else {
                 setMessage('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
             }
@@ -57,6 +59,11 @@ function PasswordChangeModal({ show, handleClose }) {
                 setMessage('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
             }
         }
+    };
+
+    const handleCloseAlertModal = () => {
+        setShowAlertModal(false);
+        handleClose();
     };
 
     useEffect(() => {
@@ -70,57 +77,69 @@ function PasswordChangeModal({ show, handleClose }) {
     }, [show]);
 
     return (
-        <Modal show={show} onHide={handleClose} centered dialogClassName="custom-modal">
-            <Modal.Header closeButton>
-                <Modal.Title>비밀번호 바꾸기</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
-                    <div className="floating-label-group">
-                        <Form.Control
-                            type="password"
-                            id="formCurrentPassword"
-                            placeholder=" "
-                            value={currentPassword}
-                            onChange={(e) => setCurrentPassword(e.target.value)}
-                            required
-                        />
-                        <Form.Label htmlFor="formCurrentPassword">현재 비밀번호</Form.Label>
-                    </div>
-                    <div className="floating-label-group">
-                        <Form.Control
-                            type="password"
-                            id="formNewPassword"
-                            placeholder=" "
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            required
-                        />
-                        <Form.Label htmlFor="formNewPassword">새 비밀번호</Form.Label>
-                    </div>
-                    <div className="floating-label-group">
-                        <Form.Control
-                            type="password"
-                            id="formConfirmPassword"
-                            placeholder=" "
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                        />
-                        <Form.Label htmlFor="formConfirmPassword">새 비밀번호 확인</Form.Label>
-                    </div>
-                </Form>
-                {message && <p className="mt-3 text-center text-danger">{message}</p>}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    취소
-                </Button>
-                <Button variant="primary" onClick={handleChangePassword}>
-                    변경
-                </Button>
-            </Modal.Footer>
-        </Modal>
+        <>
+            <Modal show={show} onHide={handleClose} centered dialogClassName="custom-modal">
+                <Modal.Header closeButton>
+                    <Modal.Title>비밀번호 바꾸기</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <div className="floating-label-group">
+                            <Form.Control
+                                type="password"
+                                id="formCurrentPassword"
+                                placeholder=" "
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                required
+                            />
+                            <Form.Label htmlFor="formCurrentPassword">현재 비밀번호</Form.Label>
+                        </div>
+                        <div className="floating-label-group">
+                            <Form.Control
+                                type="password"
+                                id="formNewPassword"
+                                placeholder=" "
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                required
+                            />
+                            <Form.Label htmlFor="formNewPassword">새 비밀번호</Form.Label>
+                        </div>
+                        <div className="floating-label-group">
+                            <Form.Control
+                                type="password"
+                                id="formConfirmPassword"
+                                placeholder=" "
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
+                            <Form.Label htmlFor="formConfirmPassword">새 비밀번호 확인</Form.Label>
+                        </div>
+                    </Form>
+                    {message && <p className="mt-3 text-center text-danger">{message}</p>}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="outline-secondary" onClick={handleClose}>
+                        취소
+                    </Button>
+                    <Button variant="outline-danger" onClick={handleChangePassword}>
+                        변경
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <CustomModal
+                show={showAlertModal}
+                handleClose={handleCloseAlertModal}
+                handleConfirm={handleCloseAlertModal}
+                title="알림"
+                body={alertModalContent}
+                confirmText="확인"
+                cancelText=""
+            />
+        </>
     );
 }
 

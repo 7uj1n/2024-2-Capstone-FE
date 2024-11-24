@@ -7,6 +7,10 @@
   width: 100%;
 }
 
+.modal-backdrop {
+  z-index: 1055 !important; /* 알림 모달을 비밀번호 변경 모달 앞으로 */
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

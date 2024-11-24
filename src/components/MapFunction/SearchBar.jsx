@@ -1,10 +1,14 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import CustomModal from '../UI/CustomModal';
 import './searchPlaces.css';
 
 const { kakao } = window;
 
-function SearchBar({ map }){
+function SearchBar({ map }) {
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+
     useEffect(() => {   //검색창 외부 클릭 시 포커스 해제
         const handleClickOutside = (event) => {
             const keywordInput = document.getElementById('keyword');
@@ -24,7 +28,8 @@ function SearchBar({ map }){
         const keyword = document.getElementById('keyword').value;
 
         if (!keyword.replace(/^\s+|\s+$/g, '')) {
-            alert('키워드를 입력해주세요!');
+            setModalContent('키워드를 입력해주세요!');
+            setShowModal(true);
             return false;
         }
 
@@ -43,9 +48,11 @@ function SearchBar({ map }){
             keywordInput.value = ''; // 검색 완료 후 입력 필드 초기화
             keywordInput.blur(); // 검색 완료 후 입력 필드 포커스 제거
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-            alert('검색 결과가 존재하지 않습니다.');
+            setModalContent('검색 결과가 존재하지 않습니다.');
+            setShowModal(true);
         } else if (status === kakao.maps.services.Status.ERROR) {
-            alert('검색 결과 중 오류가 발생했습니다.');
+            setModalContent('검색 결과 중 오류가 발생했습니다.');
+            setShowModal(true);
         }
     };
 
@@ -53,6 +60,10 @@ function SearchBar({ map }){
         if (event.key === 'Enter') {
             searchPlaces();
         }
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
     };
 
     return (
@@ -64,6 +75,16 @@ function SearchBar({ map }){
                 onKeyPress={handleKeyPress} //엔터키 입력 시 검색
             />
             <Button style={{margin: 0}} variant="dark" onClick={searchPlaces}>검색</Button>
+
+            <CustomModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                handleConfirm={handleCloseModal}
+                title="알림"
+                body={modalContent}
+                confirmText="확인"
+                cancelText=""
+            />
         </div>
     );
 };

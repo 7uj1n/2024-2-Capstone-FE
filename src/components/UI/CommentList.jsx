@@ -3,12 +3,18 @@ import { Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 import moment from 'moment-timezone';
 import useStore from '../../store/UserStore'; // Zustand 스토어 가져오기
+import CustomModal from './CustomModal'; // CustomModal 컴포넌트 가져오기
 
 const CommentList = ({ comments, fetchComments }) => {
     const [editingCommentIndex, setEditingCommentIndex] = useState(null);
     const [editingComment, setEditingComment] = useState('');
     const token = useStore(state => state.token);
     const username = useStore(state => state.username); // 현재 로그인한 사용자 이름
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const [modalTitle, setModalTitle] = useState('');
+    const [confirmAction, setConfirmAction] = useState(null);
 
     const handleEditComment = (index) => {
         setEditingCommentIndex(index);
@@ -29,20 +35,33 @@ const CommentList = ({ comments, fetchComments }) => {
             });
 
             if (response.status === 200) {
-                alert(response.data.messsage);
+                setModalTitle('알림');
+                setModalContent(response.data.messsage);
+                setShowModal(true);
                 fetchComments(); // 댓글 목록을 다시 불러와서 리렌더링
                 setEditingCommentIndex(null);
                 setEditingComment('');
             } else {
-                alert('댓글 수정에 실패했습니다. 다시 시도해주세요.');
+                setModalTitle('알림');
+                setModalContent('댓글 수정에 실패했습니다. 다시 시도해주세요.');
+                setShowModal(true);
             }
         } catch (error) {
             console.error('댓글 수정 중 오류 발생:', error);
-            alert('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
+            setModalTitle('알림');
+            setModalContent('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
+            setShowModal(true);
         }
     };
 
-    const handleDeleteComment = async (index) => {
+    const handleDeleteComment = (index) => {
+        setModalTitle('알림');
+        setModalContent('정말 삭제하시겠습니까?');
+        setConfirmAction(() => () => confirmDeleteComment(index));
+        setShowModal(true);
+    };
+
+    const confirmDeleteComment = async (index) => {
         const apiUrl = import.meta.env.VITE_API_BASE_URL;
         const commentId = comments[index].comment_id;
 
@@ -52,18 +71,29 @@ const CommentList = ({ comments, fetchComments }) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            alert('정말 삭제하시겠습니까?');    //모달로 바꿔야함
 
             if (response.status === 200) {
-                alert(response.data.messsage);
+                setModalTitle('알림');
+                setModalContent(response.data.messsage);    //댓글 삭제 완료!
+                setShowModal(true);
                 fetchComments(); // 댓글 목록을 다시 불러와서 리렌더링
+                setConfirmAction(null); // 확인 버튼만 보이도록 설정
             } else {
-                alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
+                setModalTitle('알림');
+                setModalContent('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
+                setShowModal(true);
             }
         } catch (error) {
             console.error('댓글 삭제 중 오류 발생:', error);
-            alert('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
+            setModalTitle('알림');
+            setModalContent('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
+            setShowModal(true);
         }
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setConfirmAction(null);
     };
 
     return (
@@ -104,6 +134,16 @@ const CommentList = ({ comments, fetchComments }) => {
                     </div>
                 ))
             )}
+
+            <CustomModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                handleConfirm={confirmAction || handleCloseModal}
+                title={modalTitle}
+                body={modalContent}
+                confirmText="확인"
+                cancelText={confirmAction ? "취소" : ""}
+            />
         </div>
     );
 };

@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './MyCommentsPage.css'; // 커스텀 CSS 파일 추가
 import useStore from '../../store/UserStore';
 import moment from 'moment-timezone';
+import CustomModal from '../UI/CustomModal'; // CustomModal 컴포넌트 가져오기
 
 function CommentList() {
     const [comments, setComments] = useState([]);
@@ -15,6 +16,8 @@ function CommentList() {
     const pagesPerGroup = 5;  // 한 그룹당 페이지 수
 
     const token = useStore((state) => state.token);
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
 
     const fetchComments = async () => {
         const apiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -67,36 +70,46 @@ function CommentList() {
     const handleDeleteSelected = async () => {  // 선택된 댓글 삭제
         const selectedCommentIds = comments.filter(comment => comment.checked).map(comment => comment.comment_id);
         if (selectedCommentIds.length === 0) {
-            alert('삭제할 댓글을 선택해주세요.');
+            setModalContent('삭제할 댓글을 선택해주세요.');
+            setShowModal(true);
             return;
         }
 
-        if (window.confirm("삭제하시겠습니까?")) {
-            const apiUrl = import.meta.env.VITE_API_BASE_URL;
-            try {
-                const response = await axios.delete(`${apiUrl}/api/comments/user`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
-                    data: {
-                        commentIdList: selectedCommentIds
-                    }
-                });
-                console.log('선택된 댓글 ID 목록:', selectedCommentIds);
-                console.log('댓글 삭제 결과:', response);
+        setModalContent('정말 삭제하시겠습니까?');
+        setShowModal(true);
+    };
 
-                if (response.status === 200) {
-                    alert(response.data.messsage);
-                    fetchComments(); // 댓글 목록을 다시 불러와서 리렌더링
-                    setSelectAll(false); // 전체 선택 체크박스 해제
-                } else {
-                    alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
+    const handleConfirmDelete = async () => {
+        const selectedCommentIds = comments.filter(comment => comment.checked).map(comment => comment.comment_id);
+        const apiUrl = import.meta.env.VITE_API_BASE_URL;
+        try {
+            const response = await axios.delete(`${apiUrl}/api/comments/user`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                data: {
+                    commentIdList: selectedCommentIds
                 }
-            } catch (error) {
-                console.error('댓글 삭제 중 오류 발생:', error);
-                alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
+            });
+            console.log('선택된 댓글 ID 목록:', selectedCommentIds);
+            console.log('댓글 삭제 결과:', response);
+
+            if (response.status === 200) {
+                setModalContent(response.data.messsage);    //댓글 삭제 완료!
+                fetchComments(); // 댓글 목록을 다시 불러와서 리렌더링
+                setSelectAll(false); // 전체 선택 체크박스 해제
+            } else {
+                setModalContent('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
             }
+        } catch (error) {
+            console.error('댓글 삭제 중 오류 발생:', error);
+            setModalContent('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
         }
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
     };
 
     const renderPaginationItems = () => {
@@ -156,6 +169,16 @@ function CommentList() {
                     <Pagination.Next onClick={handleNextGroup} disabled={(pageGroup + 1) * pagesPerGroup >= totalPages} />
                 </Pagination>
             </div>
+
+            <CustomModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                handleConfirm={modalContent === '정말 삭제하시겠습니까?' ? handleConfirmDelete : handleCloseModal}
+                title="알림"
+                body={modalContent}
+                confirmText="확인"
+                cancelText={modalContent === '정말 삭제하시겠습니까?' ? "취소" : ""}
+            />
         </Container>
     );
 }

@@ -41,7 +41,6 @@ const { kakao } = window;
 
 export default function PathPage() {
     const [map, setMap] = useState(null); // map 상태 관리
-    const isPolygon = useStore(state => state.isPolygon); // 폴리곤 표시 여부 상태 가져오기
 
     useEffect(() => {
         const container = document.getElementById('map'); // 지도를 담을 영역의 DOM 레퍼런스

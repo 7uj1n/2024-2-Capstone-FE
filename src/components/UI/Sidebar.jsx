@@ -7,6 +7,7 @@ import DateTime from './DateTime';
 import PathResults from './PathResults'; // PathResults 컴포넌트 가져오기
 
 import Nav from 'react-bootstrap/Nav';
+import CustomModal from './CustomModal'; // CustomModal 컴포넌트 가져오기
 import './sidebar.css';
 
 function Sidebar() {
@@ -14,6 +15,8 @@ function Sidebar() {
     const [activeLink, setActiveLink] = useState(null); // 현재 활성화된 링크 상태 관리
     const selectedRegion = useStore((state) => state.selectedRegion); // Zustand 스토어에서 상태 가져오기
     const navigate = useNavigate(); // useNavigate 훅 사용
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
 
     useEffect(() => {
         // 현재 경로에 따라 초기 활성화된 링크 설정
@@ -32,7 +35,8 @@ function Sidebar() {
 
     const handlePathSearch = (startDate) => {
         if (!selectedRegion) {
-            alert("지역을 선택해 주세요."); // 선택한 지역이 없을 경우 경고창 띄우기
+            setModalContent("지역을 선택해 주세요."); // 선택한 지역이 없을 경우 모달 내용 설정
+            setShowModal(true); // 모달 표시
         } else {
             navigate("/result"); // ResultPage로 이동
         }
@@ -43,8 +47,11 @@ function Sidebar() {
     };
 
     const handleRouteClick = (routeId) => {
-
         // 해당 경로만 보이게 하기
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
     };
 
     return (
@@ -87,6 +94,16 @@ function Sidebar() {
                 </div>
                 <hr />
             </Nav>
+
+            <CustomModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                handleConfirm={handleCloseModal}
+                title="알림"
+                body={modalContent}
+                confirmText="확인"
+                cancelText=""
+            />
         </>
     );
 }

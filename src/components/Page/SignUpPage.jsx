@@ -3,12 +3,15 @@ import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CustomModal from '../UI/CustomModal'; // CustomModal 컴포넌트 가져오기
 import './SignUpPage.css';
 
 function SignUpPage() {
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
 
     const handleSignup = async (event) => {
         event.preventDefault();
@@ -40,8 +43,8 @@ function SignUpPage() {
             if (response.status === 200) {    //회원가입 성공
                 setSuccessMessage('회원가입이 성공적으로 완료되었습니다.');
                 setErrorMessage('');
-                alert('회원가입이 성공적으로 완료되었습니다.');
-                navigate('/login');
+                setModalContent('회원가입이 성공적으로 완료되었습니다.');
+                setShowModal(true);
             } else {    //회원가입 실패
                 console.log('회원가입 실패:', response.data.message);
                 setErrorMessage('회원가입에 실패했습니다. 다시 시도해주세요.');
@@ -57,6 +60,11 @@ function SignUpPage() {
             }
             setSuccessMessage('');
         }
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        navigate('/login');
     };
 
     return (
@@ -101,6 +109,16 @@ function SignUpPage() {
                     </Col>
                 </Row>
             </Container>
+
+            <CustomModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                handleConfirm={handleCloseModal}
+                title="알림"
+                body={modalContent}
+                confirmText="확인"
+                cancelText=""
+            />
         </div>
     );
 };

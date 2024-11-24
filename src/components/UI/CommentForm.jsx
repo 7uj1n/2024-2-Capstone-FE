@@ -6,6 +6,7 @@ import './commentForm.css';
 import useStore from '../../store/UserStore'; // Zustand 스토어 가져오기
 import CommentList from './CommentList'; // 분리된 CommentList 컴포넌트 가져오기
 import RecommendationButtons from './RecommendationButtons'; // 분리된 RecommendationButtons 컴포넌트 가져오기
+import CustomModal from './CustomModal'; // CustomModal 컴포넌트 가져오기
 
 const CommentForm = ({ route, onClose }) => {
     const [comments, setComments] = useState([]);
@@ -14,6 +15,9 @@ const CommentForm = ({ route, onClose }) => {
     const [likeCount, setLikeCount] = useState(route.like);
     const [dislikeCount, setDislikeCount] = useState(route.dislike);
     const token = useStore(state => state.token);
+
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState('');
 
     const fetchComments = async () => { // 댓글 목록을 가져오는 함수
         const apiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -56,16 +60,23 @@ const CommentForm = ({ route, onClose }) => {
             });
 
             if (response.status === 200) {
-                alert(response.data.messsage);
+                setModalContent(response.data.messsage);
+                setShowModal(true);
                 setNewComment('');
                 fetchComments(); // 댓글 목록을 다시 불러와서 리렌더링
             } else {
-                alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+                setModalContent('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+                setShowModal(true);
             }
         } catch (error) {
             console.error('댓글 작성 중 오류 발생:', error);
-            alert('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
+            setModalContent('서버 오류가 발생했습니다. 나중에 다시 시도하세요.');
+            setShowModal(true);
         }
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
     };
 
     return (
@@ -118,6 +129,16 @@ const CommentForm = ({ route, onClose }) => {
             </Form>
 
             <CommentList comments={comments} fetchComments={fetchComments} />
+
+            <CustomModal
+                show={showModal}
+                handleClose={handleCloseModal}
+                handleConfirm={handleCloseModal}
+                title="알림"
+                body={modalContent}
+                confirmText="확인"
+                cancelText=""
+            />
         </div>
     );
 };
