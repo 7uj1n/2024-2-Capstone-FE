@@ -36,7 +36,7 @@
 import { useState, useEffect } from "react";
 import Polygon from "../MapFunction/Polygon.jsx"; // Polygon 컴포넌트 추가
 import SearchBar from "../MapFunction/SearchBar.jsx"; // SearchBar 컴포넌트 추가
-import useStore from "../../store/RegionStore.js";
+
 const { kakao } = window;
 
 export default function PathPage() {

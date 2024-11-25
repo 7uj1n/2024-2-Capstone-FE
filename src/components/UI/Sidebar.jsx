@@ -22,10 +22,10 @@ function Sidebar() {
         // 현재 경로에 따라 초기 활성화된 링크 설정
         if (location.pathname === '/path') {
             setActiveLink('path');
-        } else if (location.pathname === '/road') {
+        } else if (location.pathname === '/road' || location.pathname === '/road-result') {
             setActiveLink('road');
-        } else if (location.pathname === '/result') {
-            setActiveLink('result');
+        } else if (location.pathname === '/path-result') {
+            setActiveLink('path-result');
         }
     }, [location.pathname]);
 
@@ -38,7 +38,7 @@ function Sidebar() {
             setModalContent("지역을 선택해 주세요."); // 선택한 지역이 없을 경우 모달 내용 설정
             setShowModal(true); // 모달 표시
         } else {
-            navigate("/result"); // ResultPage로 이동
+            navigate("/path-result"); // PathResultPage로 이동
         }
     };
 
@@ -62,33 +62,36 @@ function Sidebar() {
 
                 <NavLink
                     to="/road"
-                    className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}   //클릭시 색 변경
-                    onClick={() => handleLinkClick('road')} // 클릭 시 상태 업데이트
+                    className={({ isActive }) =>
+                        isActive || location.pathname.startsWith('/road') ? 'nav-link active' : 'nav-link'
+                    }
+                    onClick={() => handleLinkClick('road')}
                 >
                     도로 혼잡도
                 </NavLink>
+                <hr />
                 <div className={`content ${activeLink === 'road' ? 'open' : ''}`}>
-                    {activeLink === 'road' && <DateTime onSearch={handleRoadSearch} />} {/* 활성화된 링크에 따라 텍스트 표시 */}
+                    {activeLink === 'road' && <DateTime onSearch={handleRoadSearch} showTimeSelect={true} type="traffic" />} {/* 활성화된 링크에 따라 텍스트 표시 */}
                 </div>
                 <hr />
 
                 <NavLink
                     to='/path'
-                    className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}   //클릭시 색 변경
+                    className={({ isActive }) => isActive || location.pathname.startsWith('/path') ? 'nav-link active' : 'nav-link'}   //클릭시 색 변경
                     onClick={() => handleLinkClick('path')} // 클릭 시 상태 업데이트
                 >
                     경로 찾기
                 </NavLink>
                 <hr />
-                <div className={`content ${activeLink === 'path' || activeLink === 'result' ? 'open' : ''}`}>  {/*클릭된 상태면 내용 보여줌 */}
+                <div className={`content ${activeLink === 'path' || activeLink === 'path-result' ? 'open' : ''}`}>  {/*클릭된 상태면 내용 보여줌 */}
                     {activeLink === 'path' && (
                         <div>
                             <p>{selectedRegion ? `선택한 지역: ${selectedRegion}` : '지역을 선택해주세요!'}</p>
-                            <DateTime onSearch={handlePathSearch} />
+                            <DateTime onSearch={handlePathSearch} showTimeSelect={false} type="region" />
                         </div>
                     )}  {/*활성화된 링크에 따라 텍스트 표시*/}
 
-                    {activeLink === 'result' && selectedRegion && (
+                    {activeLink === 'path-result' && selectedRegion && (
                         <PathResults selectedRegion={selectedRegion} onRouteClick={handleRouteClick} />
                     )}
                 </div>

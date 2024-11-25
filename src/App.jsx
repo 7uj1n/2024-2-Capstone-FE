@@ -9,12 +9,13 @@ import RoadPage from './components/Page/RoadPage';
 import SignUpPage from './components/Page/SignUpPage';
 import MainPage from './components/Page/MainPage';
 import PathPage from './components/Page/PathPage';
-import ResultPage from './components/Page/ResultPage';
+import PathResultPage from './components/Page/PathResultPage';
 import MyPage from './components/Page/MyPage';
 import MyCommentsPage from './components/Page/MyCommentsPage';
+import ForgotPassword from './components/Page/ForgotPassword';
+import RoadResultPage from './components/Page/RoadResultPage';
 
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'; //라우터
-import ForgotPassword from './components/Page/ForgotPassword';
 import { useEffect, useState } from 'react';
 import useStore from './store/UserStore';
 
@@ -56,7 +57,7 @@ function AppContent() {
     return null; // 인증 여부를 확인하기 전에는 아무것도 렌더링하지 않음
   }
 
-  const showSidebar = isAuthenticated && (location.pathname === '/path' || location.pathname === '/road' || location.pathname === '/result');
+  const showSidebar = isAuthenticated && (location.pathname === '/path' || location.pathname === '/road-result' || location.pathname === '/road' || location.pathname === '/path-result');
 
   return (
     <>
@@ -66,10 +67,11 @@ function AppContent() {
         <Route path="/" element={<MainPage />} /> {/* 기본 페이지 설정 */}
         <Route path="/path" element={<PrivateRoute element={<PathPage />} />} /> {/*최적 경로 찾기*/}
         <Route path="/road" element={<PrivateRoute element={<RoadPage />} />} /> {/*도로 혼잡도*/}
+        <Route path="/road-result" element={<PrivateRoute element={<RoadResultPage />} />} /> {/*도로 혼잡도 결과*/}
         <Route path="/login" element={<LoginPage />} /> {/* 로그인 페이지 */}
         <Route path='/signup' element={<SignUpPage />} /> {/*회원가입 페이지*/}
         <Route path="/forgot-password" element={<ForgotPassword />} /> {/*비밀번호 찾기 페이지*/}
-        <Route path="/result" element={<PrivateRoute element={<ResultPage />} />} /> {/*경로 결과 페이지*/}
+        <Route path="/path-result" element={<PrivateRoute element={<PathResultPage />} />} /> {/*경로 결과 페이지*/}
         <Route path="/mypage" element={<PrivateRoute element={<MyPage />} />} /> {/*마이 페이지 !로그인 필수*/}
         <Route path="/my-comments" element={<PrivateRoute element={<MyCommentsPage />} />} /> {/*작성한 댓글 페이지 !로그인 필수*/}
       </Routes>

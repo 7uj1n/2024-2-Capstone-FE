@@ -6,6 +6,7 @@ import './MyCommentsPage.css'; // 커스텀 CSS 파일 추가
 import useStore from '../../store/UserStore';
 import moment from 'moment-timezone';
 import CustomModal from '../UI/CustomModal'; // CustomModal 컴포넌트 가져오기
+import LoadingSpinner from '../UI/LoadingSpinner'; // LoadingSpinner 컴포넌트 가져오기
 
 function CommentList() {
     const [comments, setComments] = useState([]);
@@ -13,6 +14,7 @@ function CommentList() {
     const [currentPage, setCurrentPage] = useState(1);  // 현재 페이지 상태
     const [pageGroup, setPageGroup] = useState(0);  // 페이지 그룹 상태
     const [totalPages, setTotalPages] = useState(1);  // 총 페이지 수
+    const [initialLoading, setInitialLoading] = useState(true); // 초기 로딩 상태 추가
     const pagesPerGroup = 5;  // 한 그룹당 페이지 수
 
     const token = useStore((state) => state.token);
@@ -32,12 +34,20 @@ function CommentList() {
             setTotalPages(response.data.totalPages);
         } catch (error) {
             console.error('댓글을 가져오는 중 오류 발생:', error);
+        } finally {
+            setInitialLoading(false); // 데이터 가져오기 완료 후 초기 로딩 상태 해제
         }
     };
 
     useEffect(() => {
         fetchComments();
-    }, [currentPage, token]);
+    }, [token]);
+
+    useEffect(() => {
+        if (!initialLoading) {
+            fetchComments();
+        }
+    }, [currentPage]);
 
     const handleSelectAll = () => { // 전체 선택 체크박스 클릭 시
         const newSelectAll = !selectAll;
@@ -138,7 +148,9 @@ function CommentList() {
                         <Button variant="dark" onClick={handleDeleteSelected}>삭제</Button>
                     </div>
                     <hr />
-                    {comments.length === 0 ? (
+                    {initialLoading ? (
+                        <LoadingSpinner message="댓글을 불러오는 중입니다..." />
+                    ) : comments.length === 0 ? (
                         <div className="text-center text-muted">댓글이 존재하지 않습니다.</div>
                     ) : (
                         comments.map((comment, index) => (

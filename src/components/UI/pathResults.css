@@ -146,3 +146,10 @@ margin-left: 1.5rem; */
     -ms-overflow-style: none; /* IE 및 Edge에서 스크롤바 숨기기 */
     scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
 }
+
+/*소요 시간 */
+.pathStation-duration {
+    color: #3a5461; /* 연한 색상 */
+    font-size: 0.9rem; /* 글자 크기 작게 설정 */
+    display: block; /* 블록 요소로 설정하여 아래로 배치 */
+}
