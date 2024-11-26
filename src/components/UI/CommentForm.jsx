@@ -8,28 +8,35 @@ import CommentList from './CommentList'; // 분리된 CommentList 컴포넌트 �
 import RecommendationButtons from './RecommendationButtons'; // 분리된 RecommendationButtons 컴포넌트 가져오기
 import CustomModal from './CustomModal'; // CustomModal 컴포넌트 가져오기
 
-const CommentForm = ({ route, onClose }) => {
+const CommentForm = ({ route, routeIndex, onClose }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [likeStatus, setLikeStatus] = useState('none');
-    const [likeCount, setLikeCount] = useState(route.like);
-    const [dislikeCount, setDislikeCount] = useState(route.dislike);
+    const [likeCount, setLikeCount] = useState(route.positive);
+    const [dislikeCount, setDislikeCount] = useState(route.negative);
     const token = useStore(state => state.token);
 
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState('');
 
+    // routeId에서 숫자 부분만 추출하는 함수
+    const extractRouteIdNumber = (routeId) => {
+        const match = routeId.match(/\d+$/);
+        return match ? match[0] : routeId;
+    };
+
     const fetchComments = async () => { // 댓글 목록을 가져오는 함수
         const apiUrl = import.meta.env.VITE_API_BASE_URL;
+        const routeIdNumber = extractRouteIdNumber(route.routeId); // 숫자 부분만 추출
         try {
-            const response = await axios.get(`${apiUrl}/api/comments/${route.id}`, {
+            const response = await axios.get(`${apiUrl}/api/comments/${routeIdNumber}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
             console.log('요청 데이터:', response.data);
-            console.log('루트 id:', route.id);
+            console.log('루트 id:', routeIdNumber);
             
             setComments(response.data.comments);
             setLikeStatus(response.data.like_status);
@@ -42,16 +49,17 @@ const CommentForm = ({ route, onClose }) => {
 
     useEffect(() => {
         fetchComments();
-    }, [route.id, token]);
+    }, [route.routeId, token]);
 
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         if (newComment.trim() === '') return;
 
         const apiUrl = import.meta.env.VITE_API_BASE_URL;
+        const routeIdNumber = extractRouteIdNumber(route.routeId); // 숫자 부분만 추출
 
-        try {
-            const response = await axios.post(`${apiUrl}/api/comments/${route.id}`, {
+        try {   // 댓글 작성 요청
+            const response = await axios.post(`${apiUrl}/api/comments/${routeIdNumber}`, {
                 content: newComment
             }, {
                 headers: {
@@ -60,7 +68,7 @@ const CommentForm = ({ route, onClose }) => {
             });
 
             if (response.status === 200) {
-                setModalContent(response.data.messsage);
+                setModalContent(response.data.messsage); // messsage 사용
                 setShowModal(true);
                 setNewComment('');
                 fetchComments(); // 댓글 목록을 다시 불러와서 리렌더링
@@ -82,23 +90,23 @@ const CommentForm = ({ route, onClose }) => {
     return (
         <div className="comment-form">
             <div className="comment-form-header">
-                <h5>경로 {route.id} ({route.type === 'exist' ? '기존 경로' : '새로운 경로'})</h5>
+                <h5>경로 {routeIndex + 1} ({route.type === 'new' ? '새로운 경로' : '기존 경로'})</h5>
                 <Button variant="light" onClick={onClose} style={{
                     backgroundColor: 'transparent', border: 'none', fontSize: '1.5rem', margin: '0px', marginRight: '-20px', marginTop: '-5px'
                 }}>X</Button>
             </div>
 
             <div className="comment-card">
-                {route.type === 'exist' ? (
+                {route.type === 'new' ? (
+                    <p>🚌새로운 경로를 통해 <br />
+                    인천공항으로 가는 방법을 살펴보세요. <br />
+                    이동 소요 시간, 교통수단 등 주요 정보를 확인하고
+                    여러분의 경험과 팁을 댓글로 남겨보세요!</p>
+                ) : (
                     <p>📑 이 경로로 인천공항까지 <br />
                         이동한 경험이 있으신가요? <br />
                         편리했던 점, 소요 시간, 꿀팁 등을 <br />
                         자유롭게 공유해주세요!</p>
-                ) : (
-                    <p>🚌새로운 경로를 통해 <br />
-                        인천공항으로 가는 방법을 살펴보세요. <br />
-                        이동 소요 시간, 교통수단 등 주요 정보를 확인하고
-                        여러분의 경험과 팁을 댓글로 남겨보세요!</p>
                 )}
                 <RecommendationButtons
                     route={route}

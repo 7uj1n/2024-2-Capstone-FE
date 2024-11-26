@@ -103,7 +103,7 @@ function RoadPage() {
         const container = document.getElementById('map'); // 지도를 담을 영역의 DOM 레퍼런스
         const options = {
             center: new kakao.maps.LatLng(37.5665, 126.9780), // 지도의 중심좌표 (서울)
-            level: 6 // 지도의 레벨(확대, 축소 정도)
+            level: 10 // 지도의 레벨(확대, 축소 정도)
         };
 
         const kakaoMap = new kakao.maps.Map(container, options); // 지도 생성

@@ -12,6 +12,7 @@ function LoginPage() {
     const setToken = useStore((state) => state.setToken);
     const setExpiresIn = useStore((state) => state.setExpiresIn);
     const setUsername = useStore((state) => state.setUsername);
+    const setEmail = useStore((state) => state.setEmail); // 이메일 설정 함수 가져오기
     const setIsAuthenticated = useStore((state) => state.setIsAuthenticated);
 
     const handleLogin = async (event) => {
@@ -38,11 +39,13 @@ function LoginPage() {
                 const expirationTime = new Date().getTime() + expiresIn * 1000;
                 localStorage.setItem('expiresIn', expirationTime);
                 localStorage.setItem('username', username);
+                localStorage.setItem('email', email); // 이메일 저장
 
                 // Zustand 스토어에 사용자 정보 저장
                 setToken(jwt);
                 setExpiresIn(expiresIn);
                 setUsername(username);
+                setEmail(email); // 이메일 설정
                 setIsAuthenticated(true);
 
                 navigate('/road');

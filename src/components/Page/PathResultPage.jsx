@@ -341,7 +341,6 @@ import PopulationPieChart from "../UI/PopulationPieChart";
 import PathLeadTimeChart from "../UI/PathLeadTimeChart"; // PathLeadTimeChart 컴포넌트 가져오기
 import LoadingSpinner from '../UI/LoadingSpinner'; // LoadingSpinner 컴포넌트 가져오기
 import CustomModal from '../UI/CustomModal'; // CustomModal 컴포넌트 가져오기
-import PathResults from '../UI/PathResults'; // PathResults 컴포넌트 가져오기
 
 import busMarkerImage from './images/marker/bus.png';
 import trainMarkerImage from './images/marker/train.png';
@@ -410,6 +409,7 @@ function ResultPage() {
                     setShowModal(true);
                 }
                 console.log("Routes data fetched:", response.data);
+                console.log("루트 데이터", routes);
             } catch (error) {
                 console.error("Error fetching routes data:", error);
                 setModalContent('경로 데이터를 불러오는 중 오류가 발생했습니다.');
@@ -525,26 +525,29 @@ function ResultPage() {
                     const overlayContent = document.createElement('div');
                     overlayContent.className = 'custom-infowindow';
 
-                    if (segment.type === '도보' || segment.type === '자동차') {
-                        const hours = Math.floor(segment.duration / 60);
-                        const minutes = segment.duration % 60;
-                        const durationText = hours > 0 ? `${hours}시간 ${minutes}분` : `${minutes}분`;
+                    const hours = Math.floor(segment.duration / 60);
+                    const minutes = segment.duration % 60;
+                    const durationText = hours > 0 ? `${hours}시간 ${minutes}분` : `${minutes}분`;
 
+                    if (segment.type === '도보' || segment.type === '자동차') {
                         overlayContent.innerHTML = `
                             <div class="infowindow-content">${segment.type}</div>
                             <div class="pathStation-duration">${durationText}</div>
                             <button class="infowindow-close">X</button>
                         `;
-                    } else {
+                    } else {    // 버스, 지하철
                         overlayContent.innerHTML = `
-                            <div class="infowindow-content">${segment.Station}</div>
-                            <div class="pathStation-direction">${segment.type}</div>
-                            <div class="station-congestion" style="color: ${getCongestionColor(segment.congestion)};">
-                                ${segment.congestion}
-                            </div>
+                            <div class="pathStation-direction">${segment.Station}</div>
+                            <div class="infowindow-content">${segment.vehicleId}</div>
+                            <div class="pathStation-duration">${durationText}</div>
                             <button class="infowindow-close">X</button>
                         `;
                     }
+
+                    //내부 쾌적도 추가하면 오버레이에 추가...^^
+                    // <div class="station-congestion" style="color: ${getCongestionColor(segment.congestion)};">
+                    //             ${segment.congestion}
+                    //         </div>
 
                     const customOverlay = new kakao.maps.CustomOverlay({
                         position: new kakao.maps.LatLng(segment.coordinates[0][1], segment.coordinates[0][0]), // 좌표 순서 변경

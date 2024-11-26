@@ -10,7 +10,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './DateTime.css';
 
 function DateTime({ onSearch, showTimeSelect, type }) {
-    const [startDate, setStartDate] = useState(new Date(2024, 7, 1, 12)); // 초기화, 시간 12시로 설정
+    // 초기화, 시간은 12시로 설정 (Traffic만 시간 사용)
+    const initialDate = new Date(2024, 7, 1, 12);
+    const [startDate, setStartDate] = useState(initialDate);
     const setTrafficDateTime = useTrafficStore(state => state.setSelectedDateTime); // 도로 혼잡도용 상태 업데이트 함수
     const setRegionDateTime = useRegionStore(state => state.setSelectedDateTime); // 경로 찾기용 상태 업데이트 함수
 
@@ -34,7 +36,7 @@ function DateTime({ onSearch, showTimeSelect, type }) {
         value: PropTypes.string.isRequired, // value는 문자열이며 필수
         onClick: PropTypes.func.isRequired, // onClick은 함수이며 필수
         className: PropTypes.string, // className은 문자열이며 선택적
-    }
+    };
 
     const handleButtonClick = () => {
         // 날짜만 가져오기 위해 시간 관련 정보를 무시하고 yyyy-mm-dd 형식으로 변환
@@ -54,7 +56,7 @@ function DateTime({ onSearch, showTimeSelect, type }) {
         <>
             <DatePicker
                 locale={ko}
-                selected={new Date(startDate.setHours(12, 0, 0, 0))} // 초기 선택 날짜의 시간을 12:00으로 설정
+                selected={startDate} // 사용자가 선택한 시간을 반영하도록 startDate 그대로 사용
                 onChange={(date) => setStartDate(date)}
                 dateFormat={showTimeSelect ? "yyyy-MM-dd HH시" : "yyyy-MM-dd"} // 시간 선택 여부에 따라 포맷 변경, 시간에는 '시' 추가
                 customInput={<ExampleCustomInput value={showTimeSelect ? `${startDate.toISOString().split('T')[0]} ${formatTimeDisplay(startDate)}` : startDate.toISOString().split('T')[0]} />} // 시간 표시 포맷팅
