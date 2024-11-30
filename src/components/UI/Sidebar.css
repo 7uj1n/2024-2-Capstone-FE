@@ -18,6 +18,10 @@
     margin: 0;
 }
 
+/* .sidebar h5 {  
+    margin: 1rem;
+} */
+
 .sidebar hr {
     margin: 0;
 }
@@ -30,7 +34,7 @@
 }
 
 .content.open {
-    max-height: 70%; /* 최대 높이를 설정하여 애니메이션 효과를 줍니다. */
+    max-height: 35rem; /* 최대 높이를 설정하여 애니메이션 효과를 줍니다. */
     padding: 10px 0; /* 패딩 추가 */
     background-color: #fff6f6d7; /* 배경색 추가 */
     overflow-y: auto; /* 스크롤 설정 */

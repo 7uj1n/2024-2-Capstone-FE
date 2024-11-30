@@ -105,9 +105,11 @@ export default function PathResults({ selectedRegion, onRouteClick }) {
                         onClick={() => handleRouteClick(route.routeId)}
                         style={{ cursor: 'pointer' }}
                     >
+            
                         <Card.Header>
                             <span className="route-title">
-                                경로 {index + 1} ({route.type === 'new' ? '새로운 경로' : '기존 경로'})
+                                경로 {index + 1} 
+                                {/* ({route.type === 'new' ? '새로운 경로' : '기존 경로'}) */}
                             </span>
                             <div className="route-feedback">
                                 <span className="like">👍 {route.positive}</span>

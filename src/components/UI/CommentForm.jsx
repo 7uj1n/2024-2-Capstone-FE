@@ -37,7 +37,7 @@ const CommentForm = ({ route, routeIndex, onClose }) => {
 
             console.log('요청 데이터:', response.data);
             console.log('루트 id:', routeIdNumber);
-            
+
             setComments(response.data.comments);
             setLikeStatus(response.data.like_status);
             setLikeCount(response.data.positive);
@@ -90,7 +90,9 @@ const CommentForm = ({ route, routeIndex, onClose }) => {
     return (
         <div className="comment-form">
             <div className="comment-form-header">
-                <h5>경로 {routeIndex + 1} ({route.type === 'new' ? '새로운 경로' : '기존 경로'})</h5>
+                <h5>경로 {routeIndex + 1}
+                    {/* ({route.type === 'new' ? '새로운 경로' : '기존 경로'}) */}
+                </h5>
                 <Button variant="light" onClick={onClose} style={{
                     backgroundColor: 'transparent', border: 'none', fontSize: '1.5rem', margin: '0px', marginRight: '-20px', marginTop: '-5px'
                 }}>X</Button>
@@ -99,9 +101,9 @@ const CommentForm = ({ route, routeIndex, onClose }) => {
             <div className="comment-card">
                 {route.type === 'new' ? (
                     <p>🚌새로운 경로를 통해 <br />
-                    인천공항으로 가는 방법을 살펴보세요. <br />
-                    이동 소요 시간, 교통수단 등 주요 정보를 확인하고
-                    여러분의 경험과 팁을 댓글로 남겨보세요!</p>
+                        인천공항으로 가는 방법을 살펴보세요. <br />
+                        이동 소요 시간, 교통수단 등 주요 정보를 확인하고
+                        여러분의 경험과 팁을 댓글로 남겨보세요!</p>
                 ) : (
                     <p>📑 이 경로로 인천공항까지 <br />
                         이동한 경험이 있으신가요? <br />

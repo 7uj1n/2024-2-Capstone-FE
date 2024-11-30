@@ -14,6 +14,7 @@ import MyPage from './components/Page/MyPage';
 import MyCommentsPage from './components/Page/MyCommentsPage';
 import ForgotPassword from './components/Page/ForgotPassword';
 import RoadResultPage from './components/Page/RoadResultPage';
+import AirportCongestionPage from './components/Page/AirportCongestionPage';
 
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'; //라우터
 import { useEffect, useState } from 'react';
@@ -57,7 +58,7 @@ function AppContent() {
     return null; // 인증 여부를 확인하기 전에는 아무것도 렌더링하지 않음
   }
 
-  const showSidebar = isAuthenticated && (location.pathname === '/path' || location.pathname === '/road-result' || location.pathname === '/road' || location.pathname === '/path-result');
+  const showSidebar = isAuthenticated && (location.pathname === '/path' || location.pathname === '/road-result' || location.pathname === '/road' || location.pathname === '/path-result' || location.pathname === '/airport-congestion');
 
   return (
     <>
@@ -74,6 +75,7 @@ function AppContent() {
         <Route path="/path-result" element={<PrivateRoute element={<PathResultPage />} />} /> {/*경로 결과 페이지*/}
         <Route path="/mypage" element={<PrivateRoute element={<MyPage />} />} /> {/*마이 페이지 !로그인 필수*/}
         <Route path="/my-comments" element={<PrivateRoute element={<MyCommentsPage />} />} /> {/*작성한 댓글 페이지 !로그인 필수*/}
+        <Route path="/airport-congestion" element={<PrivateRoute element={<AirportCongestionPage />} />} /> {/*공항 혼잡도 예측 페이지 !로그인 필수*/}
       </Routes>
     </>
   );

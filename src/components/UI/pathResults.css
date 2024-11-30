@@ -88,11 +88,14 @@ margin-left: 1.5rem; */
     display: flex;
     align-items: center;
     gap: 5px; /* 요소 간 간격 추가 */
+
+    padding-right: 2rem; /* 왼쪽 패딩 추가 */
 }
 
 .route-title {
     font-size: 1rem; /* 경로 제목 글자 크기 작게 설정 */
-    padding-left: 15px;
+    /* padding-left: 15px */
+    padding-left: 3rem;
 }
 
 .like, .dislike {

@@ -17,6 +17,7 @@ function Sidebar() {
     const navigate = useNavigate(); // useNavigate 훅 사용
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState('');
+    const [currentTime, setCurrentTime] = useState(''); // 현재 시간을 관리하는 상태
 
     useEffect(() => {
         // 현재 경로에 따라 초기 활성화된 링크 설정
@@ -26,8 +27,21 @@ function Sidebar() {
             setActiveLink('road');
         } else if (location.pathname === '/path-result') {
             setActiveLink('path-result');
+        } else if (location.pathname === '/airport-congestion') {
+            setActiveLink('airport');
         }
     }, [location.pathname]);
+
+    useEffect(() => {
+        if (activeLink === 'airport') {
+            // 현재 시간을 업데이트
+            const now = new Date();
+            const koreaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+            const hours = String(koreaTime.getHours()).padStart(2, '0');
+            const minutes = String(koreaTime.getMinutes()).padStart(2, '0');
+            setCurrentTime(`${hours}:${minutes}`);
+        }
+    }, [activeLink]);
 
     function handleLinkClick(link) {
         setActiveLink(link); // 클릭한 링크를 상태로 설정
@@ -73,7 +87,34 @@ function Sidebar() {
                 <div className={`content ${activeLink === 'road' ? 'open' : ''}`}>
                     {activeLink === 'road' && <DateTime onSearch={handleRoadSearch} showTimeSelect={true} type="traffic" />} {/* 활성화된 링크에 따라 텍스트 표시 */}
                 </div>
+
                 <hr />
+                <NavLink
+                    to="/airport-congestion"
+                    className={({ isActive }) =>
+                        isActive || location.pathname.startsWith('/airport') ? 'nav-link active' : 'nav-link'
+                    }
+                    onClick={() => handleLinkClick('airport')}
+                >
+                    공항 예상 혼잡도
+                </NavLink>
+                <hr />
+                <div className={`content ${activeLink === 'airport' ? 'open' : ''}`}>
+                    {activeLink === 'airport' && (
+                        <div>
+                            <h5 style={{
+                                border: '1px solid #ccc', // 얇은 테두리
+                                borderRadius: '8px', // 모서리를 둥글게
+                                backgroundColor: '#fff', // 배경색 흰색
+                                padding: '1.1rem', // 내부 여백
+                                display: 'inline-block' // 인라인 블록 요소로 설정
+                            }}>
+                                현재 시간: 2024-08-17 {currentTime}</h5> {/* 날짜는 고정, 시간은 현재 한국 시간 */}
+                        </div>
+                    )}
+                </div>
+                <hr />
+
 
                 <NavLink
                     to='/path'

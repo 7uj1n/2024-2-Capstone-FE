@@ -22,6 +22,7 @@ function Header() {
         localStorage.removeItem('token');
         localStorage.removeItem('expiresIn');
         localStorage.removeItem('username');
+        localStorage.removeItem('email');
 
         // Zustand 스토어에서 사용자 정보 및 지역 선택 상태 제거
         clearAuth();
