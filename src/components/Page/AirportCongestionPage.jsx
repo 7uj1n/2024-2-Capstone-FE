@@ -57,13 +57,13 @@ function AirportCongestionPage() {
                     </h3>
                     <h3>이용에 큰 불편은 없으나 여유를 두고 이동하시길 권장합니다.</h3>
                 </div>
-                <div className="airport-congestion-graph" style={{ height: '400px' }}>
+                <div className="airport-congestion-graph" style={{ height: '400px'}}>
                     <ResponsiveBar
                         data={chartData}
                         keys={['population']}
                         indexBy="time"
-                        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-                        padding={0.3}
+                        margin={{ top: 50, right: 130, bottom: 50, left: 80 }}
+                        padding={0.5}   // 막대 간격 조정
                         valueScale={{ type: 'linear' }}
                         indexScale={{ type: 'band', round: true }}
                         colors="#FF8349" // 주황색으로 설정
@@ -82,18 +82,18 @@ function AirportCongestionPage() {
                             tickFontSize: 50 // x축 라벨 글자 크기 설정
                         }}
                         axisLeft={{
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 0,
+                            tickSize: 5,    
+                            tickPadding: 5, 
+                            tickRotation: 0,    // y축 라벨 회전 각도 설정
                             legend: '유동인구수',
-                            legendPosition: 'middle',
-                            legendOffset: -40,
-                            tickTextColor: '#333',
+                            legendPosition: 'middle', // y축 라벨 위치 설정
+                            legendOffset: -40,  // y축 라벨 위치 조정
+                            tickTextColor: '#333', // y축 라벨 색상 설정
                             tickFontSize: 14 // y축 라벨 글자 크기 설정
                         }}
-                        labelSkipWidth={12}
-                        labelSkipHeight={12}
-                        labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+                        labelSkipWidth={12} // 라벨 너비 설정
+                        labelSkipHeight={12}    // 라벨 높이 설정
+                        labelTextColor={{ from: 'color', modifiers: [['darker', 3.6]] }}    // 라벨 색상 설정
                         labelFontSize={14} // 라벨 글자 크기 설정
                         tooltip={({ id, value, color, data }) => (
                             <div
@@ -115,15 +115,15 @@ function AirportCongestionPage() {
                                 dataFrom: 'keys',
                                 anchor: 'bottom-right',
                                 direction: 'column',
-                                justify: false,
+                                justify: false, // 범례 정렬 설정
                                 translateX: 120,
                                 translateY: 0,
                                 itemsSpacing: 2,
-                                itemWidth: 100,
+                                itemWidth: 100, //
                                 itemHeight: 20,
                                 itemDirection: 'left-to-right',
                                 itemOpacity: 0.85,
-                                symbolSize: 20,
+                                symbolSize: 20, // 범례 기호 크기 설정
                                 effects: [
                                     {
                                         on: 'hover',

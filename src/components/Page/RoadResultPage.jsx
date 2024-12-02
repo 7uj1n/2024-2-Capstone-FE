@@ -1,378 +1,221 @@
-// import { useEffect, useState } from "react";
-// import SearchBar from "../MapFunction/SearchBar";
-// import useTrafficStore from '../../store/TrafficStore'; // 도로용 Zustand 스토어 가져오기
-// import useStore from '../../store/UserStore'; // 사용자 상태 관리용 Zustand 스토어 가져오기
-// import axios from 'axios';
-// import LoadingSpinner from '../UI/LoadingSpinner'; // LoadingSpinner 컴포넌트 가져오기
+import { useEffect, useRef, useState } from "react";
+import { useQuery } from "react-query";
+import { Deck } from "@deck.gl/core";
+import { PathLayer } from "@deck.gl/layers";
+import mapboxgl from "mapbox-gl"; // Mapbox GL JS
+import MapboxLanguage from "@mapbox/mapbox-gl-language"; // MapboxLanguage 임포트
+import useTrafficStore from "../../store/TrafficStore";
+import useStore from "../../store/UserStore";
+import axios from "axios";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
-// const { kakao } = window;
-
-// function RoadResultPage() {
-//     const [map, setMap] = useState(null); // map 상태 관리
-//     const [trafficData, setTrafficData] = useState([]); // 도로 혼잡도 데이터 상태 관리
-//     const [loading, setLoading] = useState(false); // 로딩 상태 관리
-//     const selectedDateTime = useTrafficStore(state => state.selectedDateTime); // 선택한 날짜와 시간 가져오기
-//     const token = useStore(state => state.token); // 사용자 토큰 가져오기
-
-//     useEffect(() => {
-//         const container = document.getElementById('map'); // 지도를 담을 영역의 DOM 레퍼런스
-//         const options = {
-//             center: new kakao.maps.LatLng(37.5665, 126.9780), // 지도의 중심좌표 (서울)
-//             level: 6 // 지도의 레벨(확대, 축소 정도)
-//         };
-
-//         const kakaoMap = new kakao.maps.Map(container, options); // 지도 생성
-//         setMap(kakaoMap); // map 상태 설정
-//     }, []);
-
-//     useEffect(() => {
-//         const fetchTrafficData = async () => {
-//             if (selectedDateTime && token) {
-//                 const { date, time } = selectedDateTime;
-//                 const apiUrl = import.meta.env.VITE_API_BASE_URL;
-//                 setLoading(true); // 로딩 상태 시작
-//                 try {
-//                     const response = await axios.get(`${apiUrl}/api/gcs/traffic/all`, {
-//                         params: {
-//                             date: date,
-//                             hour: time
-//                         },
-//                         headers: {
-//                             Authorization: `Bearer ${token}`
-//                         }
-//                     });
-//                     setTrafficData(response.data);
-//                     console.log("파라미터:", date, time);
-//                     console.log("Traffic data fetched:", response.data);
-//                 } catch (error) {
-//                     console.error("Error fetching traffic data:", error);
-//                 } finally {
-//                     setLoading(false); // 로딩 상태 종료
-//                 }
-//             }
-//         };
-
-//         fetchTrafficData();
-//     }, [selectedDateTime, token]);
-
-//     useEffect(() => {
-//         if (map && trafficData.length > 0) {
-//             trafficData.forEach(road => {
-//                 const simplifiedPath = simplifyPath(road.coordinates, 0.0001); // 단순화된 경로 생성
-//                 const path = simplifiedPath.map(coord => new kakao.maps.LatLng(coord[1], coord[0]));
-//                 const polyline = new kakao.maps.Polyline({
-//                     path: path,
-//                     strokeWeight: 5,
-//                     strokeColor: getTrafficColor(road.trafficStatus),
-//                     strokeOpacity: 0.7,
-//                     strokeStyle: 'solid'
-//                 });
-//                 polyline.setMap(map);
-//             });
-//         }
-//     }, [map, trafficData]);
-
-//     const getTrafficColor = (status) => {
-//         switch (status) {
-//             case '원활':
-//                 return '#00FF00'; // Green
-//             case '서행':
-//                 return '#FFFF00'; // Yellow
-//             case '정체':
-//                 return '#FF0000'; // Red
-//             default:
-//                 return '#000000'; // Black
-//         }
-//     };
-
-//     // Douglas-Peucker 알고리즘을 사용하여 경로 단순화
-//     const simplifyPath = (path, tolerance) => {
-//         if (path.length < 3) return path;
-
-//         const sqTolerance = tolerance * tolerance;
-
-//         const simplifyDPStep = (points, first, last, sqTolerance, simplified) => {
-//             let maxSqDist = sqTolerance;
-//             let index = -1;
-
-//             for (let i = first + 1; i < last; i++) {
-//                 const sqDist = getSqSegDist(points[i], points[first], points[last]);
-
-//                 if (sqDist > maxSqDist) {
-//                     index = i;
-//                     maxSqDist = sqDist;
-//                 }
-//             }
-
-//             if (maxSqDist > sqTolerance) {
-//                 if (index - first > 1) simplifyDPStep(points, first, index, sqTolerance, simplified);
-//                 simplified.push(points[index]);
-//                 if (last - index > 1) simplifyDPStep(points, index, last, sqTolerance, simplified);
-//             }
-//         };
-
-//         const getSqSegDist = (p, p1, p2) => {
-//             let x = p1[0];
-//             let y = p1[1];
-//             let dx = p2[0] - x;
-//             let dy = p2[1] - y;
-
-//             if (dx !== 0 || dy !== 0) {
-//                 const t = ((p[0] - x) * dx + (p[1] - y) * dy) / (dx * dx + dy * dy);
-
-//                 if (t > 1) {
-//                     x = p2[0];
-//                     y = p2[1];
-//                 } else if (t > 0) {
-//                     x += dx * t;
-//                     y += dy * t;
-//                 }
-//             }
-
-//             dx = p[0] - x;
-//             dy = p[1] - y;
-
-//             return dx * dx + dy * dy;
-//         };
-
-//         const last = path.length - 1;
-//         const simplified = [path[0]];
-//         simplifyDPStep(path, 0, last, sqTolerance, simplified);
-//         simplified.push(path[last]);
-
-//         return simplified;
-//     };
-
-//     return (
-//         <div>
-//             {loading && <LoadingSpinner message="도로 혼잡도 데이터를 불러오는 중입니다..." />}
-//             {map && <SearchBar map={map} />} {/* map이 존재할 때만 SearchBar 컴포넌트 렌더링 */}
-//             <div id="map" style={{
-//                 width: '100%',
-//                 height: '100vh'
-//             }}>
-//             </div>
-//         </div>
-//     );
-// }
-
-// export default RoadResultPage;
-
-import { useEffect, useState } from "react";
-import SearchBar from "../MapFunction/SearchBar";
-import useTrafficStore from '../../store/TrafficStore'; // 도로용 Zustand 스토어 가져오기
-import useStore from '../../store/UserStore'; // 사용자 상태 관리용 Zustand 스토어 가져오기
-import axios from 'axios';
-import LoadingSpinner from '../UI/LoadingSpinner'; // LoadingSpinner 컴포넌트 가져오기
-
-const { kakao } = window;
+// Mapbox access token
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 function RoadResultPage() {
-    const [map, setMap] = useState(null); // map 상태 관리
-    const [trafficData, setTrafficData] = useState([]); // 도로 혼잡도 데이터 상태 관리
-    const [loading, setLoading] = useState(false); // 로딩 상태 관리
-    const [polylines, setPolylines] = useState([]); // 폴리라인 상태 관리
-    const selectedDateTime = useTrafficStore(state => state.selectedDateTime); // 선택한 날짜와 시간 가져오기
-    const token = useStore(state => state.token); // 사용자 토큰 가져오기
+    const mapContainerRef = useRef(null); // Mapbox 지도 컨테이너 참조
+    const deckRef = useRef(null); // Deck.gl 참조
+    const mapRef = useRef(null); // Mapbox 지도 인스턴스 참조
+    const [detailMode, setDetailMode] = useState(false); // 디테일 모드 기본 값 false
+    const selectedDateTime = useTrafficStore((state) => state.selectedDateTime);
+    const token = useStore((state) => state.token);
 
-    useEffect(() => {
-        const container = document.getElementById('map'); // 지도를 담을 영역의 DOM 레퍼런스
-        const options = {
-            center: new kakao.maps.LatLng(37.458666, 126.4419679), // 지도의 중심좌표 (인천공항)
-            level: 7 // 지도의 레벨(확대, 축소 정도)
-        };
-
-        const kakaoMap = new kakao.maps.Map(container, options); // 지도 생성
-        setMap(kakaoMap); // map 상태 설정
-
-        // 지도 이동 및 확대/축소 이벤트 리스너 추가
-        kakao.maps.event.addListener(kakaoMap, 'bounds_changed', () => {
-            updatePolylinesVisibility(kakaoMap); // 지도가 변경될 때 폴리라인 가시성 업데이트
-        });
-        kakao.maps.event.addListener(kakaoMap, 'zoom_changed', () => {
-            updatePolylinesByZoomLevel(kakaoMap.getLevel()); // 줌 레벨 변경 시 폴리라인 업데이트
-        });
-    }, []);
-
-    useEffect(() => {
-        const fetchTrafficData = async () => {
-            if (selectedDateTime && token) {
-                const { date, time } = selectedDateTime;
-                const apiUrl = import.meta.env.VITE_API_BASE_URL;
-                setLoading(true); // 로딩 상태 시작
-                try {
-                    const response = await axios.get(`${apiUrl}/api/gcs/traffic/all`, {
-                        params: {
-                            date: date,
-                            hour: time
-                        },
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    });
-                    setTrafficData(response.data);
-                    console.log("파라미터:", date, time);
-                    console.log("Traffic data fetched:", response.data);
-                } catch (error) {
-                    console.error("Error fetching traffic data:", error);
-                } finally {
-                    setLoading(false); // 로딩 상태 종료
-                }
-            }
-        };
-
-        fetchTrafficData();
-    }, [selectedDateTime, token]);
-
-    useEffect(() => {
-        if (map && trafficData.length > 0) {
-            updatePolylinesByZoomLevel(map.getLevel()); // 초기 로딩 시 폴리라인 필터링
-        }
-    }, [map, trafficData]);
-
-    // 줌 레벨에 따라 폴리라인을 필터링하는 함수
-    const filterTrafficDataByZoomLevel = (zoomLevel) => {
-        if (zoomLevel >= 11) {
-            return trafficData.filter((_, index) => index % 11 === 0); // 11개마다 하나씩 표시
-        } else if (zoomLevel >= 10) {
-            return trafficData.filter((_, index) => index % 9 === 0); // 9개마다 하나씩 표시
-        } else if (zoomLevel >= 9) {
-            return trafficData.filter((_, index) => index % 7 === 0); // 7개마다 하나씩 표시
-        } else {
-            return trafficData;
-        }
-    };
-
-    // 줌 레벨 변경 시 필터링된 폴리라인을 업데이트하는 함수
-    const updatePolylinesByZoomLevel = (zoomLevel) => {
-        const filteredData = filterTrafficDataByZoomLevel(zoomLevel);
-        
-        const newPolylines = filteredData.map(road => {
-            const simplifiedPath = simplifyPath(road.coordinates, 0.0001); // 단순화된 경로 생성
-            const path = simplifiedPath.map(coord => new kakao.maps.LatLng(coord[1], coord[0]));
-            const polyline = new kakao.maps.Polyline({
-                path: path,
-                strokeWeight: 5,
-                strokeColor: getTrafficColor(road.trafficStatus),
-                strokeOpacity: 0.7,
-                strokeStyle: 'solid'
-            });
-            const bounds = new kakao.maps.LatLngBounds();
-            path.forEach(point => bounds.extend(point));
-
-            // 지도에 폴리라인 추가
-            polyline.setMap(map);
-
-            return { polyline, bounds };
-        });
-
-        // 기존 폴리라인을 제거하고 새로운 필터된 폴리라인 설정
-        polylines.forEach(({ polyline }) => polyline.setMap(null)); // 기존 폴리라인 삭제
-        setPolylines(newPolylines); // 새로운 폴리라인 상태 업데이트
-    };
-
-    const updatePolylinesVisibility = (map) => {
-        if (!map) return;
-
-        const bounds = map.getBounds();
-
-        // 화면 내에 있는 폴리라인만 필터링
-        const visiblePolylines = polylines.filter(({ polyline, bounds: polylineBounds }) => {
-            const isVisible = (
-                bounds.contain(polylineBounds.getSouthWest()) ||
-                bounds.contain(polylineBounds.getNorthEast())
+    const fetchTrafficData = async () => {
+        if (selectedDateTime && token) {
+            const { date, time } = selectedDateTime;
+            const apiUrl = import.meta.env.VITE_API_BASE_URL;
+            const regions = [
+                { num: 1, ranks: [101, 102, 103, 104, 105, 106, 107] },
+                { num: 2, ranks: [101, 102, 103, 104, 105, 106] },
+                { num: 3, ranks: [101, 102, 103, 104] },
+            ];
+            const requests = regions.flatMap((region) =>
+                region.ranks.map((rank) =>
+                    axios.get(`${apiUrl}/api/gcs/traffic/${region.num}/all/${rank}`, {
+                        params: { date, hour: time },
+                        headers: { Authorization: `Bearer ${token}` },
+                    })
+                )
             );
+            const responses = await Promise.all(requests);
+            return responses.flatMap((response) => response.data);
+        }
+        return [];
+    };
 
-            return isVisible;
+    // 필터링된 데이터를 가져오는 함수
+    const fetchFilteredData = async () => {
+        if (selectedDateTime && token) {
+            const { date, time } = selectedDateTime;
+            const apiUrl = import.meta.env.VITE_API_BASE_URL;
+            const regions = [
+                { num: 1, ranks: [102, 103] }, // 경기도
+                { num: 2, ranks: [102, 103, 104, 105, 106] }, // 인천
+                { num: 3, ranks: [104] }, // 서울
+            ];
+            const requests = regions.flatMap((region) =>
+                region.ranks.map((rank) =>
+                    axios.get(`${apiUrl}/api/gcs/traffic/${region.num}/all/${rank}`, {
+                        params: { date, hour: time },
+                        headers: { Authorization: `Bearer ${token}` },
+                    })
+                )
+            );
+            const responses = await Promise.all(requests);
+            return responses.flatMap((response) => response.data);
+        }
+        return [];
+    };
+
+    const { data: trafficData = [], isLoading } = useQuery(
+        ["trafficData", selectedDateTime, token],
+        fetchTrafficData,
+        { enabled: !!selectedDateTime && !!token }
+    );
+
+    const { data: filteredTrafficData = [] } = useQuery(
+        ["filteredTrafficData", selectedDateTime, token],
+        fetchFilteredData,
+        { enabled: !!selectedDateTime && !!token }
+    );
+
+    useEffect(() => {
+        // Mapbox 지도 생성
+        const map = new mapboxgl.Map({
+            container: mapContainerRef.current,
+            style: "mapbox://styles/mapbox/streets-v12", // 기본 스타일 사용
+            center: [126.4419679, 37.458666], // 초기 중심 좌표(인천공항)
+            zoom: 11,
+        });
+        mapRef.current = map;
+
+        // onRender 이벤트를 통해 MapboxLanguage 플러그인 추가
+        map.on('render', function(e) { 
+            e.target.addControl(new MapboxLanguage({ defaultLanguage: 'ko' })); 
         });
 
-        // 화면 내에 있는 폴리라인만 지도에 추가
-        polylines.forEach(({ polyline }) => polyline.setMap(null)); // 모든 폴리라인 숨기기
-        visiblePolylines.forEach(({ polyline }) => polyline.setMap(map)); // 화면 내에 있는 폴리라인만 지도에 추가
-    };
+        // Deck.gl 초기화
+        const deck = new Deck({
+            canvas: "deck-canvas",
+            initialViewState: {
+                longitude: 126.4419679,
+                latitude: 37.458666,
+                zoom: 11,
+                pitch: 0,
+                bearing: 0,
+            },
+            controller: true,
+            layers: [],
+            onViewStateChange: ({ viewState }) => {
+                map.jumpTo({
+                    center: [viewState.longitude, viewState.latitude],
+                    zoom: viewState.zoom,
+                    bearing: viewState.bearing,
+                    pitch: viewState.pitch,
+                });
+            },
+        });
+        deckRef.current = deck;
 
-    const getTrafficColor = (status) => {
-        switch (status) {
-            case '원활':
-                return '#00FF00'; // Green
-            case '서행':
-                return '#FFFF00'; // Yellow
-            case '정체':
-                return '#FF0000'; // Red
-            default:
-                return '#000000'; // Black
+        // Mapbox와 Deck.gl의 캔버스 연결
+        map.on("move", () => {
+            const center = map.getCenter();
+            deck.setProps({
+                viewState: {
+                    longitude: center.lng,
+                    latitude: center.lat,
+                    zoom: map.getZoom(),
+                    bearing: map.getBearing(),
+                    pitch: map.getPitch(),
+                },
+            });
+        });
+
+        // 줌 변경에 따른 디테일 모드 상태 업데이트
+        map.on("zoom", () => {
+            const zoomLevel = map.getZoom();
+            setDetailMode(zoomLevel >= 12); // 줌 레벨에 따라 디테일 모드 변경
+        });
+
+        return () => {
+            map.remove(); // Mapbox 메모리 해제
+            deck.finalize(); // Deck.gl 메모리 해제
+        };
+    }, []); // onRender를 의존성에서 제외하여 처음 한 번만 실행
+
+    useEffect(() => {
+        if (deckRef.current && trafficData.length > 0) {
+            const map = mapRef.current;
+
+            if (map) {
+                const zoom = map.getZoom();
+
+                // 줌 레벨에 따라 데이터 필터링
+                const filteredData = detailMode
+                    ? trafficData // 디테일 모드일 때는 모든 도로 데이터를 표시
+                    : filteredTrafficData; // 디테일 모드가 아니면 필터링된 데이터만 표시
+
+                console.log('필터된 데이터: ', filteredData);
+                console.log('모든 데이터 :', trafficData);
+
+                // Deck.gl 레이어 업데이트
+                const layers = [
+                    new PathLayer({
+                        id: "traffic-path-layer",
+                        data: filteredData,
+                        getPath: (road) => road.coordinates.map((coord) => [coord[0], coord[1]]),
+                        getColor: (road) => {
+                            switch (road.trafficStatus) {
+                                case "원활":
+                                    return [0, 204, 0]; // 연두에 투명도 추가
+                                case "서행":
+                                    return [255, 255, 0]; // Yellow with transparency
+                                case "정체":
+                                    return [255, 0, 0]; // Red with transparency
+                                default:
+                                    return [0, 0, 0]; // Black with transparency
+                            }
+                        },
+                        widthMinPixels: 3,
+                    }),
+                ];
+
+                // Deck.gl 레이어를 직접 업데이트
+                deckRef.current.setProps({ layers });
+            }
         }
-    };
+    }, [trafficData, filteredTrafficData, detailMode]);
 
-    // Douglas-Peucker 알고리즘을 사용하여 경로 단순화
-    const simplifyPath = (path, tolerance) => {
-        if (path.length < 3) return path;
-
-        const sqTolerance = tolerance * tolerance;
-
-        const simplifyDPStep = (points, first, last, sqTolerance, simplified) => {
-            let maxSqDist = sqTolerance;
-            let index = -1;
-
-            for (let i = first + 1; i < last; i++) {
-                const sqDist = getSqSegDist(points[i], points[first], points[last]);
-
-                if (sqDist > maxSqDist) {
-                    index = i;
-                    maxSqDist = sqDist;
-                }
-            }
-
-            if (maxSqDist > sqTolerance) {
-                if (index - first > 1) simplifyDPStep(points, first, index, sqTolerance, simplified);
-                simplified.push(points[index]);
-                if (last - index > 1) simplifyDPStep(points, index, last, sqTolerance, simplified);
-            }
-        };
-
-        const getSqSegDist = (p, p1, p2) => {
-            let x = p1[0];
-            let y = p1[1];
-            let dx = p2[0] - x;
-            let dy = p2[1] - y;
-
-            if (dx !== 0 || dy !== 0) {
-                const t = ((p[0] - x) * dx + (p[1] - y) * dy) / (dx * dx + dy * dy);
-
-                if (t > 1) {
-                    x = p2[0];
-                    y = p2[1];
-                } else if (t > 0) {
-                    x += dx * t;
-                    y += dy * t;
-                }
-            }
-
-            dx = p[0] - x;
-            dy = p[1] - y;
-
-            return dx * dx + dy * dy;
-        };
-
-        const last = path.length - 1;
-        const simplified = [path[0]];
-        simplifyDPStep(path, 0, last, sqTolerance, simplified);
-        simplified.push(path[last]);
-
-        return simplified;
-    };
-
-
-    
     return (
-        <div>
-            {loading && <LoadingSpinner message="도로 혼잡도 데이터를 불러오는 중입니다..." />}
-            {map && <SearchBar map={map} />} {/* map이 존재할 때만 SearchBar 컴포넌트 렌더링 */}
-            <div id="map" style={{
-                width: '100%',
-                height: '100vh'
-            }}>
-            </div>
+        <div
+            style={{
+                height: "100vh", // 페이지 높이를 100%로 설정
+                margin: 0, // 기본 여백 제거
+                padding: 0, // 기본 패딩 제거
+                overflow: "hidden", // 페이지에 스크롤이 생기지 않도록 설정
+            }}
+        >
+            {isLoading && <LoadingSpinner message="도로 혼잡도 데이터를 불러오는 중입니다..." />}
+            <div
+                ref={mapContainerRef}
+                id="map"
+                style={{
+                    width: "100%",
+                    height: "100%", // 지도 컨테이너가 전체 화면을 차지하도록 설정
+                    position: "relative", // 상대 위치 설정
+                    overflow: "hidden", // 지도 내부에서도 스크롤이 생기지 않도록 설정
+                }}
+            />
+            <canvas
+                id="deck-canvas"
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                }}
+            />
         </div>
     );
 }

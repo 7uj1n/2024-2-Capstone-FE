@@ -31,6 +31,12 @@
 .airport-congestion-graph {
     margin-left: 6rem;
     margin-right: 6rem;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border: 1px solid #ddd; /* 살짝 테두리 추가 */
 }
 
 .airport-congestion-text {

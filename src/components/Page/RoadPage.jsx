@@ -1,123 +1,51 @@
-// import { useEffect, useState, useRef } from "react";
-// import SearchBar from "../MapFunction/SearchBar";
-// import trafficData from '../data/traffic.json'; // 도로 혼잡도 데이터 가져오기
-
-// const { kakao } = window;
-
-// function RoadPage() {
-//     const [map, setMap] = useState(null); // map 상태 관리
-//     const polylinesRef = useRef([]); // 폴리라인 참조 관리
-
-//     useEffect(() => {
-//         const container = document.getElementById('map'); // 지도를 담을 영역의 DOM 레퍼런스
-//         const options = {
-//             center: new kakao.maps.LatLng(37.5665, 126.9780), // 지도의 중심좌표 (서울)
-//             level: 6 // 지도의 레벨(확대, 축소 정도)
-//         };
-
-//         const kakaoMap = new kakao.maps.Map(container, options); // 지도 생성
-//         setMap(kakaoMap); // map 상태 설정
-
-//         const createPolyline = (route) => {
-//             const linePath = route.coordinates.map(coord => new kakao.maps.LatLng(coord[0], coord[1]));
-
-//             let color;
-//             switch (route.roadType) {
-//                 case '일반도로':
-//                     color = route.speed >= 30 ? '#00FF00' : route.speed >= 15 ? '#FFA500' : '#FF0000';
-//                     break;
-//                 case '국도':
-//                     color = route.speed >= 40 ? '#00FF00' : route.speed >= 20 ? '#FFA500' : '#FF0000';
-//                     break;
-//                 case '도시고속도로':
-//                     color = route.speed >= 60 ? '#00FF00' : route.speed >= 30 ? '#FFA500' : '#FF0000';
-//                     break;
-//                 case '고속도로':
-//                     color = route.speed >= 70 ? '#00FF00' : route.speed >= 40 ? '#FFA500' : '#FF0000';
-//                     break;
-//                 default:
-//                     color = '#000000'; // 기본 색상 (예: 검정색)
-//             }
-
-//             return new kakao.maps.Polyline({
-//                 path: linePath,
-//                 strokeWeight: 5,
-//                 strokeColor: color,
-//                 strokeOpacity: 0.7,
-//                 strokeStyle: 'solid'
-//             });
-//         };
-
-//         const updatePolylines = () => {
-//             const level = kakaoMap.getLevel();
-//             const newPolylines = [];
-
-//             trafficData.routes.forEach(route => {
-//                 if (level <= 7 || (route.roadType === '국도' || route.roadType === '고속도로')) {
-//                     const polyline = createPolyline(route); // 폴리라인 생성
-//                     polyline.setMap(kakaoMap);  // 지도에 폴리라인 추가
-//                     newPolylines.push(polyline);    // 새로운 폴리라인 배열에 추가
-//                 }
-//             });
-
-//             // 기존 폴리라인 제거
-//             polylinesRef.current.forEach(polyline => polyline.setMap(null));   
-//             polylinesRef.current = newPolylines;    // 새로운 폴리라인 배열로 참조 업데이트
-//         };
-
-//         // 초기 폴리라인 설정
-//         updatePolylines();
-
-//         // 줌 레벨 변경 이벤트 리스너 추가
-//         kakao.maps.event.addListener(kakaoMap, 'zoom_changed', updatePolylines);
-
-//         return () => {
-//             // 컴포넌트 언마운트 시 이벤트 리스너 제거
-//             kakao.maps.event.removeListener(kakaoMap, 'zoom_changed', updatePolylines);
-//         };
-//     }, []);
-
-//     return (
-//         <div>
-//             {map && <SearchBar map={map} />} {/* map이 존재할 때만 SearchBar 컴포넌트 렌더링 */}
-//             <div id="map" style={{
-//                 width: '100%',
-//                 height: '100vh'
-//             }}>
-//             </div>
-//         </div>
-//     );
-// }
-
-// export default RoadPage;
-
 import { useEffect, useState, useRef } from "react";
-import SearchBar from "../MapFunction/SearchBar";
-
-const { kakao } = window;
+import mapboxgl from "mapbox-gl";
+import MapboxLanguage from "@mapbox/mapbox-gl-language"; // MapboxLanguage 임포트
 
 function RoadPage() {
     const [map, setMap] = useState(null); // map 상태 관리
+    const mapContainerRef = useRef(null); // Mapbox 지도 컨테이너
 
     useEffect(() => {
-        const container = document.getElementById('map'); // 지도를 담을 영역의 DOM 레퍼런스
-        const options = {
-            center: new kakao.maps.LatLng(37.5665, 126.9780), // 지도의 중심좌표 (서울)
-            level: 10 // 지도의 레벨(확대, 축소 정도)
-        };
+        // Mapbox Access Token 설정
+        mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-        const kakaoMap = new kakao.maps.Map(container, options); // 지도 생성
-        setMap(kakaoMap); // map 상태 설정
+        // 지도 초기화
+        const mapboxMap = new mapboxgl.Map({
+            container: mapContainerRef.current, // 지도 컨테이너 요소
+            style: "mapbox://styles/mapbox/streets-v11", // Mapbox 스타일 URL
+            center: [126.9780, 37.5665], // 초기 중심 좌표 (서울)
+            zoom: 11, // 초기 줌 레벨
+        });
+
+        // MapboxLanguage 객체를 map.addControl로 추가
+        const language = new MapboxLanguage();
+        mapboxMap.addControl(language); // MapboxLanguage 추가
+
+        setMap(mapboxMap); // map 상태 설정
+
+        return () => {
+            mapboxMap.remove(); // 컴포넌트 언마운트 시 지도 제거
+        };
     }, []);
 
     return (
-        <div>
-            {map && <SearchBar map={map} />} {/* map이 존재할 때만 SearchBar 컴포넌트 렌더링 */}
-            <div id="map" style={{
-                width: '100%',
-                height: '100vh'
-            }}>
-            </div>
+        <div
+            style={{
+                height: "100vh", // 페이지 높이를 100%로 설정
+                margin: 0, // 기본 여백 제거
+                padding: 0, // 기본 패딩 제거
+                overflow: "hidden", // 페이지에 스크롤이 생기지 않도록 설정
+            }}
+        >
+            <div
+                ref={mapContainerRef}
+                style={{
+                    width: "100%",
+                    height: "100%", // 지도 컨테이너가 전체 화면을 차지하도록 설정
+                    overflow: "hidden", // 지도 내부에서도 스크롤이 생기지 않도록 설정
+                }}
+            ></div>
         </div>
     );
 }

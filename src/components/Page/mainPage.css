@@ -26,13 +26,36 @@
     transform: translate(-50%, -50%);
     color: white;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    background: rgba(231, 231, 231, 0.7); /* 배경색을 rgba로 설정하여 투명도 조절 */
+    padding: 7rem;
+    padding-bottom: 5rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.content-overlay p {
+    
 }
 
 .main-page-container h1 {
-    /* font-size: 2.5rem; */
-    margin-bottom: 10rem;
+    font-size: 2.6rem;
+    margin-bottom: 5rem;
     font-weight: bold;
-    /* color: #343a40; */
+    color: #364869;
+    text-shadow: none; /* 그림자 효과 제거 */
+    opacity: 0;
+    animation: smoothAppear 1s forwards;
+    animation-delay: 0.5s;
+}
+
+.main-page-container h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #202c42;
+    text-shadow: none; /* 그림자 효과 제거 */
+    opacity: 0;
+    animation: smoothAppear 1s forwards;
+    animation-delay: 1s;
 }
 
 .main-page-container p {
@@ -50,8 +73,31 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    opacity: 0;
+    animation: smoothAppear 1s forwards;
+    animation-delay: 1.5s;
 }
 
 .start-button:hover {
     background-color: #c82333;
+}
+
+/* 새로운 CSS 클래스 추가 */
+.centered-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+@keyframes smoothAppear {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(0);
+  }
 }

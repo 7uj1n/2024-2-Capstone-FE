@@ -91,7 +91,6 @@ const CommentForm = ({ route, routeIndex, onClose }) => {
         <div className="comment-form">
             <div className="comment-form-header">
                 <h5>경로 {routeIndex + 1}
-                    {/* ({route.type === 'new' ? '새로운 경로' : '기존 경로'}) */}
                 </h5>
                 <Button variant="light" onClick={onClose} style={{
                     backgroundColor: 'transparent', border: 'none', fontSize: '1.5rem', margin: '0px', marginRight: '-20px', marginTop: '-5px'
