@@ -49,7 +49,7 @@ function Header() {
         <>
             <Navbar fixed="top" expand="lg" className="navbar navbar-expand-lg bg-danger">
                 <Container fluid>   {/*좌우 끝으로 가게*/}
-                    <Navbar.Brand href="/" className='ml-0 text-white' style={{ fontWeight: 'bold' }}>✈️AirportPreview</Navbar.Brand>
+                    <Navbar.Brand href="/" className='ml-0 text-white' style={{ fontWeight: 'bold' }}>✈️PORT:AL                    </Navbar.Brand>
                     <Navbar.Toggle />
                     <Navbar.Collapse className="justify-content-end">
                         <Nav className="mr-auto">
@@ -61,7 +61,7 @@ function Header() {
                                 <NavDropdown.Item onClick={handleLogoutClick} className="custom-dropdown-item">로그아웃</NavDropdown.Item>
                             </NavDropdown>
                         ) : (
-                            <Nav.Link as={NavLink} to="/login" className="custom-nav-link" style={{padding: "8px"}}>로그인</Nav.Link>
+                            <Nav.Link as={NavLink} to="/login" className="custom-nav-link" style={{ padding: "8px" }}>로그인</Nav.Link>
                         )}
                     </Navbar.Collapse>
                 </Container>
