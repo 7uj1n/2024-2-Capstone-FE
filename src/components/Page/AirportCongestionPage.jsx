@@ -28,13 +28,40 @@ function AirportCongestionPage() {
         "매우 혼잡": "#ff0800"
     };
 
+
     const getCongestionLevel = (population) => {
-        if (population <= 7000) return '원활';
-        if (population <= 7600) return '보통';
-        if (population <= 8200) return '약간 혼잡';
-        if (population <= 8600) return '혼잡';
+        // LG U+ 데이터가 전체의 30%라 가정하고 보정
+        // const adjustedPopulation = population * (3.33/ 5);    // 7 / 5
+        
+        const adjustedPopulation = population;    
+
+        if (adjustedPopulation <= 6500) return '원활';
+        if (adjustedPopulation <= 7200) return '보통';
+        if (adjustedPopulation <= 7600) return '약간 혼잡';
+        if (adjustedPopulation <= 8000) return '혼잡';
         return '매우 혼잡';
     };
+
+    // const getCongestionLevel = (population) => {
+    //     // LG U+ 데이터가 전체의 30%라 가정하고 보정
+    //     // const adjustedPopulation = population * (2 / 3);    // 7 / 5
+        
+    //     const adjustedPopulation = population;    // 7 / 5
+
+    //     if (adjustedPopulation <= 6000) return '원활';
+    //     if (adjustedPopulation <= 6600) return '보통';
+    //     if (adjustedPopulation <= 7200) return '약간 혼잡';
+    //     if (adjustedPopulation <= 7600) return '혼잡';
+    //     return '매우 혼잡';
+    // };
+
+    // const getCongestionLevel = (population) => {
+    //     if (population <= 7000) return '원활';
+    //     if (population <= 7600) return '보통';
+    //     if (population <= 8200) return '약간 혼잡';
+    //     if (population <= 8600) return '혼잡';
+    //     return '매우 혼잡';
+    // };
 
     useEffect(() => {
         const fetchCongestionData = async () => {
@@ -51,20 +78,25 @@ function AirportCongestionPage() {
                     }
                 });
                 const data = response.data;
+                console.log(data);
+
                 const baseTime = new Date();
                 baseTime.setHours(hour);
                 baseTime.setMinutes(0);
                 baseTime.setSeconds(0);
 
-                const chartData = [
-                    { time: `${String(baseTime.getHours()).padStart(2, '0')}:00`, population: data.current_count, congestion: getCongestionLevel(data.current_count), color: congestionColors[getCongestionLevel(data.current_count)] },
-                    { time: `${String(baseTime.getHours() + 1).padStart(2, '0')}:00`, population: data.predictions['+1h'], congestion: getCongestionLevel(data.predictions['+1h']), color: congestionColors[getCongestionLevel(data.predictions['+1h'])] },
-                    { time: `${String(baseTime.getHours() + 2).padStart(2, '0')}:00`, population: data.predictions['+2h'], congestion: getCongestionLevel(data.predictions['+2h']), color: congestionColors[getCongestionLevel(data.predictions['+2h'])] },
-                    { time: `${String(baseTime.getHours() + 3).padStart(2, '0')}:00`, population: data.predictions['+3h'], congestion: getCongestionLevel(data.predictions['+3h']), color: congestionColors[getCongestionLevel(data.predictions['+3h'])] },
-                    { time: `${String(baseTime.getHours() + 4).padStart(2, '0')}:00`, population: data.predictions['+4h'], congestion: getCongestionLevel(data.predictions['+4h']), color: congestionColors[getCongestionLevel(data.predictions['+4h'])] },
-                    { time: `${String(baseTime.getHours() + 5).padStart(2, '0')}:00`, population: data.predictions['+5h'], congestion: getCongestionLevel(data.predictions['+5h']), color: congestionColors[getCongestionLevel(data.predictions['+5h'])] },
-                    { time: `${String(baseTime.getHours() + 6).padStart(2, '0')}:00`, population: data.predictions['+6h'], congestion: getCongestionLevel(data.predictions['+6h']), color: congestionColors[getCongestionLevel(data.predictions['+6h'])] }
-                ];
+                // 기존 시간 계산 로직에서 수정
+const formatTime = (hour) => `${String(hour % 24).padStart(2, '0')}:00`;
+
+const chartData = [
+    { time: formatTime(baseTime.getHours()), population: data.current_count, congestion: getCongestionLevel(data.current_count), color: congestionColors[getCongestionLevel(data.current_count)] },
+    { time: formatTime(baseTime.getHours() + 1), population: data.predictions['+1h'], congestion: getCongestionLevel(data.predictions['+1h']), color: congestionColors[getCongestionLevel(data.predictions['+1h'])] },
+    { time: formatTime(baseTime.getHours() + 2), population: data.predictions['+2h'], congestion: getCongestionLevel(data.predictions['+2h']), color: congestionColors[getCongestionLevel(data.predictions['+2h'])] },
+    { time: formatTime(baseTime.getHours() + 3), population: data.predictions['+3h'], congestion: getCongestionLevel(data.predictions['+3h']), color: congestionColors[getCongestionLevel(data.predictions['+3h'])] },
+    { time: formatTime(baseTime.getHours() + 4), population: data.predictions['+4h'], congestion: getCongestionLevel(data.predictions['+4h']), color: congestionColors[getCongestionLevel(data.predictions['+4h'])] },
+    { time: formatTime(baseTime.getHours() + 5), population: data.predictions['+5h'], congestion: getCongestionLevel(data.predictions['+5h']), color: congestionColors[getCongestionLevel(data.predictions['+5h'])] },
+    { time: formatTime(baseTime.getHours() + 6), population: data.predictions['+6h'], congestion: getCongestionLevel(data.predictions['+6h']), color: congestionColors[getCongestionLevel(data.predictions['+6h'])] }
+];
 
                 const currentLevel = getCongestionLevel(data.current_count);
                 setCurrentCongestionLevel(currentLevel);
