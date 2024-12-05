@@ -2,10 +2,6 @@
     margin-top: 2px;
 }
 
-/*  h5(날짜 시간)
-text-align: left;
-margin-left: 1.5rem; */
-
 .card {
     padding: 0;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -89,7 +85,11 @@ margin-left: 1.5rem; */
     align-items: center;
     gap: 5px; /* 요소 간 간격 추가 */
 
-    padding-right: 2rem; /* 왼쪽 패딩 추가 */
+    padding-right: 1.5rem; /* 왼쪽 패딩 추가 */
+}
+
+.comment-btn{
+    margin-left: 1rem;
 }
 
 .route-title {

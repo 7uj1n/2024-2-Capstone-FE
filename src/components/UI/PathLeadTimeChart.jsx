@@ -15,13 +15,19 @@ const PathLeadTimeChart = () => {
             // 데이터를 Nivo 차트 형식에 맞게 변환
             const data = routes.map((route, index) => ({
                 route: `경로 ${index + 1}`,
-                averageTime: route.averageTime || 0, // averageTime 데이터가 없는 경우 0으로 설정
+                averageTime: route.totalTime || 0, // averageTime 데이터가 없는 경우 0으로 설정
                 color: colors[index % colors.length] // 색상 배열에서 색상 선택
             }));
             setBarData(data);
         }
         setLoading(false);
     }, [routes]);
+
+    const formatTime = (minutes) => {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        return hours > 0 ? `${hours}시간 ${mins}분` : `${mins}분`;
+    };
 
     return (
         <div style={{ height: '400px' }}> {/* 고정된 높이 설정 */}
@@ -58,6 +64,19 @@ const PathLeadTimeChart = () => {
                         legendPosition: 'middle', // y축 레전드 위치 설정
                         legendOffset: -40 // y축 레전드 오프셋 설정
                     }}
+                    tooltip={({ value }) => (
+                        <div
+                            style={{
+                                padding: '5px 10px',
+                                background: 'rgba(0, 0, 0, 0.75)',
+                                color: '#fff',
+                                borderRadius: '3px',
+                                fontSize: '15px',
+                            }}
+                        >
+                            {`소요 시간: ${formatTime(value)}`}
+                        </div>
+                    )}
                     labelSkipWidth={12} // 라벨 스킵 너비 설정
                     labelSkipHeight={12} // 라벨 스킵 높이 설정
                     labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }} // 라벨 텍스트 색상 설정

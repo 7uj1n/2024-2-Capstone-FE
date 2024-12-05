@@ -10,6 +10,7 @@ const CommentList = ({ comments, fetchComments }) => {
     const [editingComment, setEditingComment] = useState('');
     const token = useStore(state => state.token);
     const email = useStore(state => state.email); // 현재 로그인한 사용자 이메일
+    const username = useStore(state => state.username); // 현재 로그인한 사용자 이름
 
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState('');
@@ -106,7 +107,7 @@ const CommentList = ({ comments, fetchComments }) => {
                         <div className="comment-header">
                             <span className="comment-author">{comment.username}</span>
                             <span className="comment-date">{moment.utc(comment.updated_time).tz('Asia/Seoul').format('YYYY-MM-DD HH:mm')}</span>
-                            {comment.email === email && (
+                            {comment.username === username && (
                                 <>
                                     {editingCommentIndex === index ? (
                                         <>

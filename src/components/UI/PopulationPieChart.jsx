@@ -9,14 +9,15 @@ const PopulationPieChart = () => {
 
     useEffect(() => {
         if (routes.length > 0) {
-            // 경로 데이터에서 유동인구 수를 추출하여 파이차트 데이터 형식으로 변환
-            const data = routes
-                // .filter(route => route.type === 'exist') // 기존 경로만 포함
-                .map((route, index) => ({
-                    id: `경로 ${index + 1}`,
-                    label: `경로 ${index + 1}`,
-                    value: route.frequency || 0, // frequency 데이터가 없는 경우 0으로 설정
-                }));
+            // 유동인구 총합 계산
+            const totalUsers = routes.reduce((sum, route) => sum + (route.users || 0), 0);
+            // 파이 차트 데이터 변환
+            const data = routes.map((route, index) => ({
+                id: `경로 ${index + 1}`,
+                label: `경로 ${index + 1}`,
+                value: route.users || 0, // 유동인구가 없는 경우 0으로 설정
+                percentage: totalUsers > 0 ? ((route.users || 0) / totalUsers * 100).toFixed(1) : 0 // 퍼센트 계산
+            }));
             setPieData(data);
         }
         setLoading(false);
@@ -68,6 +69,21 @@ const PopulationPieChart = () => {
                             ]
                         }
                     ]}
+                    tooltip={({ datum }) => (
+                        <div
+                            style={{
+                                padding: '5px 10px',
+                                background: 'rgba(0, 0, 0, 0.75)',
+                                color: '#fff',
+                                borderRadius: '3px',
+                                fontSize: '15px',
+                            }}
+                        >
+                            <strong>{datum.label}</strong>
+                            <div>{`유동인구: ${datum.value}명`}</div>
+                            <div>{`비율: ${datum.data.percentage}%`}</div>
+                        </div>
+                    )}
                 />
             )}
         </div>

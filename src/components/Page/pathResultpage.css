@@ -22,6 +22,7 @@
 /* 커스텀 스크롤바 스타일 */
 .dashboard-container::-webkit-scrollbar {
     width: 12px; /* 스크롤바 너비 */
+    display: none;
 }
 
 .dashboard-container::-webkit-scrollbar-track {

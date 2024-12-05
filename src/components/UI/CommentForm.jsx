@@ -27,7 +27,7 @@ const CommentForm = ({ route, routeIndex, onClose }) => {
 
     const fetchComments = async () => { // 댓글 목록을 가져오는 함수
         const apiUrl = import.meta.env.VITE_API_BASE_URL;
-        const routeIdNumber = extractRouteIdNumber(route.routeId); // 숫자 부분만 추출
+        const routeIdNumber = route.routeId; // 숫자 부분만 추출
         try {
             const response = await axios.get(`${apiUrl}/api/comments/${routeIdNumber}`, {
                 headers: {
@@ -56,7 +56,7 @@ const CommentForm = ({ route, routeIndex, onClose }) => {
         if (newComment.trim() === '') return;
 
         const apiUrl = import.meta.env.VITE_API_BASE_URL;
-        const routeIdNumber = extractRouteIdNumber(route.routeId); // 숫자 부분만 추출
+        const routeIdNumber = route.routeId; // 숫자 부분만 추출
 
         try {   // 댓글 작성 요청
             const response = await axios.post(`${apiUrl}/api/comments/${routeIdNumber}`, {

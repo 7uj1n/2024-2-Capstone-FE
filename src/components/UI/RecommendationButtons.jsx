@@ -43,7 +43,7 @@ const RecommendationButtons = ({ route, likeStatus, setLikeStatus }) => {
 
     const handleLikeClick = async () => {
         const apiUrl = import.meta.env.VITE_API_BASE_URL;
-        const routeIdNumber = extractRouteIdNumber(route.routeId); // 숫자 부분만 추출
+        const routeIdNumber = route.routeId; // 숫자 부분만 추출
 
         if (!routeIdNumber) {
             setModalContent({ title: 'Error', body: '유효한 경로 ID가 없습니다.' });
@@ -79,7 +79,7 @@ const RecommendationButtons = ({ route, likeStatus, setLikeStatus }) => {
 
     const handleDislikeClick = async () => {
         const apiUrl = import.meta.env.VITE_API_BASE_URL;
-        const routeIdNumber = extractRouteIdNumber(route.routeId); // 숫자 부분만 추출
+        const routeIdNumber = route.routeId; // 숫자 부분만 추출
 
         if (!routeIdNumber) {
             setModalContent({ title: 'Error', body: '유효한 경로 ID가 없습니다.' });
