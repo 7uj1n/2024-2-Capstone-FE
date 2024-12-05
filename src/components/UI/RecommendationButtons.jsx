@@ -58,7 +58,7 @@ const RecommendationButtons = ({ route, likeStatus, setLikeStatus }) => {
                 }
             });
 
-            console.log(response.data);
+            console.log("추천: ",response.data);
 
             if (response.status === 200) {
                 updateRouteLikes(route.routeId, response.data.positive);
@@ -105,6 +105,8 @@ const RecommendationButtons = ({ route, likeStatus, setLikeStatus }) => {
                 setModalContent({ title: 'Error', body: '비추천에 실패했습니다. 다시 시도해주세요.' });
                 setShowModal(true);
             }
+
+            console.log("비추천: ",response.data);
         } catch (error) {
             console.error('비추천 중 오류 발생:', error);
             setModalContent({ title: 'Server Error', body: '서버 오류가 발생했습니다. 나중에 다시 시도하세요.' });

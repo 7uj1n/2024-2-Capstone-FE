@@ -235,6 +235,8 @@ function Sidebar() {
                 <h3 className='menu-title'>메뉴</h3>
                 <hr />
 
+
+
                 <NavLink
                     to="/road"
                     className={({ isActive }) =>
@@ -276,7 +278,8 @@ function Sidebar() {
                 </div>
                 <hr />
 
-
+                
+                <hr />
                 <NavLink
                     to='/path'
                     className={({ isActive }) => isActive || location.pathname.startsWith('/path') ? 'nav-link active' : 'nav-link'}   //클릭시 색 변경
